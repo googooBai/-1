@@ -5,24 +5,66 @@ using namespace std;
 
 
 
-Point LagrangeInterpolating(vector<Point> known, Time t)
+Point LagrangeInterpolating(vector<SourceData> data, Time t)
 {
 	Point result{ 0.0,0.0,0.0,0.0 };
-	for (auto k=known.begin();k!=known.end();k++)
+	//查找内插点的位置
+	int posfirst=0, posend=data.size()-1;
+	int index=(posfirst+posend)/2;
+	while (posfirst < posend)
+	{
+		if (t >= data[index].time&&t < data[index + 1].time)
+			break;
+		if (t < data[index].time)
+		{
+			posend = index;
+			index = (posfirst + posend) / 2;
+		}
+		if (t >= data[index + 1].time)
+		{
+			posfirst = index + 1;
+			index = (posfirst + posend) / 2;
+		}
+	}
+
+
+	/*
+	while (t > data[index].time)
+	{
+		++index;
+		if (index == data.size())
+			break;
+	}
+	*/
+	//阶数
+	int staffnum = 9;
+	//内插起始点与终结点
+	int start, end;
+	if (index - staffnum / 2 < 0)
+		start = 0;
+	else
+		start = index - staffnum / 2;
+	if (index + staffnum/2+1> data.size() - 1)
+		end = data.size() - 1;
+	else
+		end = index +staffnum/2+1;
+
+	for (auto k=start;k!=end;k++)
 	{
 		double tempx = 1,tempy=1,tempz=1;
-		for (auto i = known.begin(); i != known.end(); i++)
+		for (auto i = start; i != end; i++)
 		{
 			if (k != i)
 			{
-				tempx *= (t - i->time) / (k->time - i->time);
-				tempy *= (t - i->time) / (k->time - i->time);
-				tempz *= (t - i->time) / (k->time - i->time);
+				tempx *= (t - data[i].time) / (data[k].time - data[i].time);
+				tempy *= (t - data[i].time) / (data[k].time - data[i].time);
+				tempz *= (t - data[i].time) / (data[k].time - data[i].time);
 			}			
 		}
-		result.x += tempx*k->x;
-		result.y += tempy*k->y;
-		result.z += tempz*k->z;
+		result.x += tempx*data[k].x;
+		result.y += tempy*data[k].y;
+		result.z += tempz*data[k].z;
+		result.time = t;
 	}
 	return result;
 }

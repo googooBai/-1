@@ -9,4 +9,4 @@ using std::vector;
 
 vector<SourceData> GetData(string filename);
 vector<Point> SetKnownPoint(vector<SourceData> data);
-Point LagrangeInterpolating(vector<Point> known, Time t);
+Point LagrangeInterpolating(vector<SourceData> data, Time t);

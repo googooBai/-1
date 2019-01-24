@@ -34,5 +34,6 @@ vector<SourceData> GetData(string filename)
 		fid >> temp.yz;
 		data.push_back(temp);		
 	}
+	data.pop_back();
 	return data;
 }
