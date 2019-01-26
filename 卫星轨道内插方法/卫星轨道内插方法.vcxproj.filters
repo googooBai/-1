@@ -24,7 +24,7 @@
     <ClCompile Include="LagrangeInterpolating.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="SetKnownPoint.cpp">
+    <ClCompile Include="ChebyshevInterpolating.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>

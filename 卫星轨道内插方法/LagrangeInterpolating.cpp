@@ -44,15 +44,15 @@ Point LagrangeInterpolating(vector<SourceData> data, Time t)
 		start = 0;
 	else
 		start = index - staffnum / 2;
-	if (index + staffnum/2+1> data.size() - 1)
+	if (index + staffnum/2> data.size() - 1)
 		end = data.size() - 1;
 	else
-		end = index +staffnum/2+1;
+		end = index +staffnum/2;
 
 	for (auto k=start;k!=end;k++)
 	{
 		double tempx = 1,tempy=1,tempz=1;
-		for (auto i = start; i != end; i++)
+		for (auto i = start; i != end+1; i++)
 		{
 			if (k != i)
 			{
