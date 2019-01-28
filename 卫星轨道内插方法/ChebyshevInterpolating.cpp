@@ -6,7 +6,7 @@
 using namespace Eigen;
 using namespace std;
 
-Point ChebyshevInterpolating(vector<SourceData> data,Time t)
+Point ChebyshevInterpolating(vector<Point> data,Time t)
 {
 	//查找内插点位置
 	int posfirst = 0, posend = data.size() - 1;
@@ -60,15 +60,11 @@ Point ChebyshevInterpolating(vector<SourceData> data,Time t)
 		MatL(i - start, 1) = data[i].y;
 		MatL(i - start, 2) = data[i].z;
 	}
-	//test
-	cout << MatT;
-	cout << endl << endl;
-	cout << MatL << endl << endl;
+	
 
 
 	MatrixXd parameter=(MatT.transpose()*MatT).inverse()*MatT.transpose()*MatL;
-	//test
-	cout << parameter << endl;
+	
 
 	Point result;
 	double tao = 2 * (t - data[start].time) / (data[end].time - data[start].time) - 1;
@@ -82,13 +78,10 @@ Point ChebyshevInterpolating(vector<SourceData> data,Time t)
 		else
 			T(j) = 2 * tao*T(j-1) - T(j-2);
 	}
-	//test
-	cout << T << endl;
+	
 
 	MatrixXd coor = T.transpose()*parameter;
 
-	//test
-	cout << coor << endl;
 	result.x = coor(0);
 	result.y = coor(1);
 	result.z = coor(2);

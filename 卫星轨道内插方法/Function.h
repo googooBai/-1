@@ -8,5 +8,6 @@ using std::vector;
 
 
 vector<SourceData> GetData(string filename);
-Point LagrangeInterpolating(vector<SourceData> data, Time t);
-Point ChebyshevInterpolating(vector<SourceData> data, Time t);
+vector<Point> GetKnownPoint(vector<SourceData> data);
+Point LagrangeInterpolating(vector<Point> data, Time t);
+Point ChebyshevInterpolating(vector<Point> data, Time t);

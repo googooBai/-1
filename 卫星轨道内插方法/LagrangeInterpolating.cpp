@@ -5,7 +5,7 @@ using namespace std;
 
 
 
-Point LagrangeInterpolating(vector<SourceData> data, Time t)
+Point LagrangeInterpolating(vector<Point> data, Time t)
 {
 	Point result{ 0.0,0.0,0.0,0.0 };
 	//查找内插点的位置
@@ -49,7 +49,7 @@ Point LagrangeInterpolating(vector<SourceData> data, Time t)
 	else
 		end = index +staffnum/2;
 
-	for (auto k=start;k!=end;k++)
+	for (auto k=start;k!=end+1;k++)
 	{
 		double tempx = 1,tempy=1,tempz=1;
 		for (auto i = start; i != end+1; i++)
