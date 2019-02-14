@@ -9,5 +9,6 @@ using std::vector;
 
 vector<SourceData> GetData(string filename);
 vector<Point> GetKnownPoint(vector<SourceData> data);
-Point LagrangeInterpolating(vector<Point> data, Time t);
-Point ChebyshevInterpolating(vector<Point> data, Time t);
+int FindIndex(int fp, int ep,Time t, vector<Point> data);
+Point LagrangeInterpolating(vector<Point> data, Time t, int staff);//已知点 内插时间点 阶数 
+Point ChebyshevInterpolating(vector<Point> data, Time t,int staff);//已知点 内插时间点 阶数

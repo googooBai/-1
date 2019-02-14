@@ -114,9 +114,11 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="ChebyshevInterpolating.cpp" />
+    <ClCompile Include="FindIndex.cpp" />
     <ClCompile Include="GetData.cpp" />
     <ClCompile Include="GetKnownPoint.cpp" />
     <ClCompile Include="LagrangeInterpolating.cpp" />
+    <ClCompile Include="LarReference.cpp" />
     <ClCompile Include="Test.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -124,7 +126,9 @@
     <ClInclude Include="Function.h" />
   </ItemGroup>
   <ItemGroup>
+    <Text Include="..\..\Data\几何轨道\graceA-kinOrb-2008-01-01.txt" />
     <Text Include="..\..\Data\几何轨道\graceA-kinOrb-2008-01-02.txt" />
+    <Text Include="different.txt" />
     <Text Include="output.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

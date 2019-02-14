@@ -30,6 +30,12 @@
     <ClCompile Include="GetKnownPoint.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="LarReference.cpp">
+      <Filter>资源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="FindIndex.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="DataStructure.h">
@@ -44,6 +50,12 @@
       <Filter>资源文件</Filter>
     </Text>
     <Text Include="..\..\Data\几何轨道\graceA-kinOrb-2008-01-02.txt">
+      <Filter>资源文件</Filter>
+    </Text>
+    <Text Include="different.txt">
+      <Filter>资源文件</Filter>
+    </Text>
+    <Text Include="..\..\Data\几何轨道\graceA-kinOrb-2008-01-01.txt">
       <Filter>资源文件</Filter>
     </Text>
   </ItemGroup>

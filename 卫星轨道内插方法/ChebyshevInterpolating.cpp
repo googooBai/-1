@@ -1,64 +1,44 @@
 #include<vector>
 #include<iostream>
 #include"DataStructure.h"
+#include"Function.h"
 #include"Eigen\Dense"
 
 using namespace Eigen;
 using namespace std;
 
-Point ChebyshevInterpolating(vector<Point> data,Time t)
+Point ChebyshevInterpolating(vector<Point> data,Time t,int staff)
 {
 	//查找内插点位置
 	int posfirst = 0, posend = data.size() - 1;
-	int index = (posfirst + posend) / 2;
-	while (posfirst < posend)
-	{
-		if (t >= data[index].time&&t < data[index + 1].time)
-			break;
-		if (t < data[index].time)
-		{
-			posend = index;
-			index = (posfirst + posend) / 2;
-		}
-		if (t >= data[index + 1].time)
-		{
-			posfirst = index + 1;
-			index = (posfirst + posend) / 2;
-		}
-	}
-	int staffnum = 9;
-	//内插起始点与终结点
-	int start, end;
-	if (index - staffnum / 2 < 0)
-		start = 0;
-	else
-		start = index - staffnum / 2;
-	if (index + staffnum / 2 > data.size() - 1)
-		end = data.size() - 1;
-	else
-		end = index + staffnum / 2;
-	//矩阵规模（已知点数*10（9阶））
-	MatrixXd MatT(end-start+1,10);
+	int index=FindIndex(posfirst, posend, t, data);
 	
-	for (auto i = start; i !=end+1; i++)
+	
+	//内插起始点与终结点
+	if (index > (data.size() - staff - 1))
+		index = data.size() - staff - 1;
+	//矩阵规模（（staff+1）*（staff*1））
+	MatrixXd MatT(staff+1,staff+1);
+	
+	for (auto i = index; i <=index+staff; i++)
 	{
-		double tao = 2 * (data[i].time - data[start].time) / (data[end].time-data[start].time) - 1;
-		for (auto j = 0; j !=10; j++)
+		double tao = 2 * (data[i].time - data[index].time) / (data[index+staff].time-data[index].time) - 1;
+		for (auto j = 0; j <=staff; j++)
 		{
 			if (j == 0)
-				MatT(i-start,j) = 1;
+				MatT(i-index,j) = 1;
 			else if (j == 1)
-				MatT(i-start,j) = tao;
+				MatT(i-index,j) = tao;
 			else
-				MatT(i - start, j) = 2 * tao*MatT(i - start, j-1) - MatT(i - start, j-2);
+				MatT(i - index, j) = 2 * tao*MatT(i - index, j-1) - MatT(i - index, j-2);
 		}
 	}
-	MatrixXd MatL(end-start+1,3);
-	for (auto i = start; i !=end+1; i++)
+	MatrixXd MatL(staff+1,3);
+	for (auto i = index; i <=index+staff; i++)
 	{
-		MatL(i-start,0) = data[i].x;
-		MatL(i - start, 1) = data[i].y;
-		MatL(i - start, 2) = data[i].z;
+		MatL(i- index,0) = data[i].x;
+		MatL(i - index, 1) = data[i].y;
+		MatL(i - index, 2) = data[i].z;
 	}
 	
 
@@ -67,9 +47,9 @@ Point ChebyshevInterpolating(vector<Point> data,Time t)
 	
 
 	Point result;
-	double tao = 2 * (t - data[start].time) / (data[end].time - data[start].time) - 1;
-	VectorXd T(10);
-	for (auto j = 0; j != 10; j++)
+	double tao = 2 * (t - data[index].time) / (data[index+staff].time - data[index].time) - 1;
+	VectorXd T(staff+1);
+	for (auto j = 0; j <=staff; j++)
 	{
 		if (j == 0)
 			T(j) = 1;
