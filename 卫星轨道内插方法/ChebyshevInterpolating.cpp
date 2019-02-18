@@ -1,11 +1,4 @@
-#include<vector>
-#include<iostream>
-#include"DataStructure.h"
 #include"Function.h"
-#include"Eigen\Dense"
-
-using namespace Eigen;
-using namespace std;
 
 Point ChebyshevInterpolating(vector<Point> data,Time t,int staff)
 {
@@ -40,12 +33,9 @@ Point ChebyshevInterpolating(vector<Point> data,Time t,int staff)
 		MatL(i - index, 1) = data[i].y;
 		MatL(i - index, 2) = data[i].z;
 	}
-	
-
 
 	MatrixXd parameter=(MatT.transpose()*MatT).inverse()*MatT.transpose()*MatL;
 	
-
 	Point result;
 	double tao = 2 * (t - data[index].time) / (data[index+staff].time - data[index].time) - 1;
 	VectorXd T(staff+1);
@@ -57,8 +47,7 @@ Point ChebyshevInterpolating(vector<Point> data,Time t,int staff)
 			T(j) = tao;
 		else
 			T(j) = 2 * tao*T(j-1) - T(j-2);
-	}
-	
+	}	
 
 	MatrixXd coor = T.transpose()*parameter;
 

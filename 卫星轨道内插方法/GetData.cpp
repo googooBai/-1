@@ -1,10 +1,5 @@
-#include<iostream>
-#include<fstream>
-#include<string>
-#include<vector>
-#include"DataStructure.h"
+#include"Function.h"
 
-using namespace std;
 
 vector<SourceData> GetData(string filename)
 {

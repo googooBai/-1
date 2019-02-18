@@ -21,12 +21,6 @@
     <ClCompile Include="Test.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="LagrangeInterpolating.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="ChebyshevInterpolating.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
     <ClCompile Include="GetKnownPoint.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
@@ -36,12 +30,27 @@
     <ClCompile Include="FindIndex.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="Spline.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="ClassInterpolate.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="CmpError.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="DataStructure.h">
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="Function.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="ClassInterpolate.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="include.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>

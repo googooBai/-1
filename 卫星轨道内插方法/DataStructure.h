@@ -2,7 +2,7 @@
 #define DATASTUCTURE_H
 
 using Time = double;
-const Time min = 1.0 / (24 * 60);
+const Time minute = 1.0 / (24 * 60);
 
 struct Point {
 	//Coordinate
