@@ -14,7 +14,7 @@ vector<Point> GetKnownPoint(vector<SourceData> data)
 		temp.y = data[index].y;
 		temp.z = data[index].z;
 		knownp.push_back(temp);
-		index += 10;
+		index += 90;
 	}
 	if (data.size() != 1&&index!=data.size()-1)
 	{

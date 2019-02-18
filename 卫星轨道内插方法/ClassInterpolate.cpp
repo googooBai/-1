@@ -7,8 +7,12 @@ Point LarrangeInterpolate::interpolate(vector<Point> data, Time t, int staff)
 	int posfirst = 0, posend = data.size() - 1;
 	int index = FindIndex(posfirst, posend, t, data);
 	//处理边界
-	if (index > (data.size() - staff - 1))
-		index = data.size() - staff - 1;
+	if (index < staff / 2)
+		index = 0;
+	else if (index > (data.size() - (staff - staff /2) - 1))
+		index = data.size() - staff-1 ;
+	else
+		index = index - staff /2;
 	//内插过程
 	Point result{ 0.0,0.0,0.0,0.0 };
 	for (auto k = index; k <= index + staff; k++)
@@ -39,8 +43,12 @@ Point ChebyshevInterpolate::interpolate(vector<Point> data, Time t, int staff)
 
 
 	//内插起始点与终结点
-	if (index > (data.size() - staff - 1))
+	if (index < staff / 2)
+		index = 0;
+	else if (index >(data.size() - (staff - staff / 2) - 1))
 		index = data.size() - staff - 1;
+	else
+		index = index - staff / 2;
 	//矩阵规模（（staff+1）*（staff*1））
 	MatrixXd MatT(staff + 1, staff + 1);
 
