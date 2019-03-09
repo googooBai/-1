@@ -6,8 +6,12 @@ Point Spline(vector<Point> data, Time t, int staff)
 	int index = FindIndex(posfirst, posend, t, data);
 
 	//处理边界
-	if (index > (data.size() - staff - 1))
+	if (index < staff / 2)
+		index = 0;
+	else if (index >(data.size() - (staff - staff / 2) - 1))
 		index = data.size() - staff - 1;
+	else
+		index = index - staff / 2;
 	//复制已知点
 	vector<Point> knownp(staff + 1);
 	copy(data.begin() + index, data.begin() + index + staff+1, knownp.begin());

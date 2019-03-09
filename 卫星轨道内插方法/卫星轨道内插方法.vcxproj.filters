@@ -30,13 +30,13 @@
     <ClCompile Include="FindIndex.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="Spline.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
     <ClCompile Include="ClassInterpolate.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="CmpError.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Normalization.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>

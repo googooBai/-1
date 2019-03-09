@@ -28,3 +28,11 @@ public:
 	virtual ~ChebyshevInterpolate(){}
 	virtual Point interpolate(vector<Point> data, Time t, int staff);
 };
+
+class Spline3 :public Interpolate
+{
+public:
+	Spline3(){}
+	virtual ~Spline3(){}
+	virtual Point interpolate(vector<Point> data, Time t, int staff);
+};

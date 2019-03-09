@@ -11,9 +11,22 @@ int main()
 	double start, end;
 	start = knownp.front().time;
 	end = knownp.back().time;
-	vector<Point> interpolating1,interpolating2;
+	/*vector<Point> x(101); 
+	vector<SourceData> u(100001);
+	for (int i = 0; i < 101; i++)
+	{
+		x[i].time =6464646+i*0.001;
+		x[i].x = 500000 * std::cos(0.001*i*3.1415926535);
+	}
+	for (int i = 0; i < 100001; i++)
+	{
+		u[i].time = 6464646 + i*0.00001;
+		u[i].x= 500000 * std::cos(0.00001*i*3.1415926535);
+	}*/
+
 	LarrangeInterpolate L;
 	ChebyshevInterpolate C;
+	Spline3 S;
 	//while (start <= end)
 	//{
 	//	//interpolating2.push_back(C.interpolate(knownp, start,9));
