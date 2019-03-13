@@ -2,8 +2,6 @@
 #include"DataStructure.h"
 #include"include.h"
 
-
-
 class Interpolate
 {
 public:

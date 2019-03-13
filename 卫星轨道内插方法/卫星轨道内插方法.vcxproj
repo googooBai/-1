@@ -119,7 +119,6 @@
     <ClCompile Include="GetData.cpp" />
     <ClCompile Include="GetKnownPoint.cpp" />
     <ClCompile Include="LarReference.cpp" />
-    <ClCompile Include="Normalization.cpp" />
     <ClCompile Include="Test.cpp" />
   </ItemGroup>
   <ItemGroup>

@@ -36,9 +36,6 @@
     <ClCompile Include="CmpError.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="Normalization.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="DataStructure.h">
