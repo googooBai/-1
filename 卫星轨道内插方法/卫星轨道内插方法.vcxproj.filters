@@ -18,14 +18,8 @@
     <ClCompile Include="GetData.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="Test.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
     <ClCompile Include="GetKnownPoint.cpp">
       <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="LarReference.cpp">
-      <Filter>资源文件</Filter>
     </ClCompile>
     <ClCompile Include="FindIndex.cpp">
       <Filter>源文件</Filter>
@@ -34,6 +28,9 @@
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="CmpError.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Test.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>
@@ -64,5 +61,23 @@
     <Text Include="..\..\Data\几何轨道\graceA-kinOrb-2008-01-01.txt">
       <Filter>资源文件</Filter>
     </Text>
+    <Text Include="..\..\Data\几何轨道\graceA-kinOrb-2008-01-03.txt">
+      <Filter>资源文件</Filter>
+    </Text>
+    <Text Include="..\..\Data\几何轨道\graceA-kinOrb-2008-01-04.txt">
+      <Filter>资源文件</Filter>
+    </Text>
+    <Text Include="..\..\Data\几何轨道\graceA-kinOrb-2008-01-05.txt">
+      <Filter>资源文件</Filter>
+    </Text>
+    <Text Include="..\..\Data\几何轨道\graceA-kinOrb-2008-01-06.txt">
+      <Filter>资源文件</Filter>
+    </Text>
+    <Text Include="..\..\Data\几何轨道\graceA-kinOrb-2008-01-07.txt">
+      <Filter>资源文件</Filter>
+    </Text>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="ClassDiagram.cd" />
   </ItemGroup>
 </Project>

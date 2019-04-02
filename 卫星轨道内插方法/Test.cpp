@@ -1,11 +1,11 @@
 #include"ClassInterpolate.h"
 #include"Function.h"
 
-
+using namespace ClassInter;
 
 int main()
 {
-	string filename{ "D:\\练习\\毕业设计\\Data\\几何轨道\\graceA-kinOrb-2008-01-02.txt" };
+	string filename{ "D:\\练习\\毕业设计\\Data\\几何轨道\\graceA-kinOrb-2008-01-01.txt" };
 	vector<SourceData> data = GetData(filename);
 	vector<Point> knownp = GetKnownPoint(data);
 	double start, end;
@@ -13,7 +13,7 @@ int main()
 	end = knownp.back().time;
 	LarrangeInterpolate L;
 	ChebyshevInterpolate C;
-	Spline3 S;
+	Spline3v2 S;
 	/*vector<Point> x(101); 
 	vector<SourceData> u(100001);
 	for (int i = 0; i <= 5; i++)
@@ -39,12 +39,12 @@ int main()
 	
 	ofstream fout;
 	
-	fout.open("output.txt");
+	fout.open("different.txt");
 	if (!fout.is_open())
 		exit(EXIT_FAILURE);
 
 
-	CmpError(S, 15, data, knownp, fout);
+	CmpError(S, 11, data, knownp, fout);
 	
 	fout.close();
 	/*fout.setf(ios::fixed);

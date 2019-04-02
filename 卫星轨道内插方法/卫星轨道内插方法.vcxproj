@@ -31,7 +31,7 @@
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
-    <ConfigurationType>Application</ConfigurationType>
+    <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <PlatformToolset>v140</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
@@ -118,7 +118,6 @@
     <ClCompile Include="FindIndex.cpp" />
     <ClCompile Include="GetData.cpp" />
     <ClCompile Include="GetKnownPoint.cpp" />
-    <ClCompile Include="LarReference.cpp" />
     <ClCompile Include="Test.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -130,8 +129,16 @@
   <ItemGroup>
     <Text Include="..\..\Data\几何轨道\graceA-kinOrb-2008-01-01.txt" />
     <Text Include="..\..\Data\几何轨道\graceA-kinOrb-2008-01-02.txt" />
+    <Text Include="..\..\Data\几何轨道\graceA-kinOrb-2008-01-03.txt" />
+    <Text Include="..\..\Data\几何轨道\graceA-kinOrb-2008-01-04.txt" />
+    <Text Include="..\..\Data\几何轨道\graceA-kinOrb-2008-01-05.txt" />
+    <Text Include="..\..\Data\几何轨道\graceA-kinOrb-2008-01-06.txt" />
+    <Text Include="..\..\Data\几何轨道\graceA-kinOrb-2008-01-07.txt" />
     <Text Include="different.txt" />
     <Text Include="output.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="ClassDiagram.cd" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
