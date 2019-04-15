@@ -139,8 +139,9 @@
     <Text Include="..\..\Data\几何轨道\graceA-kinOrb-2008-01-05.txt" />
     <Text Include="..\..\Data\几何轨道\graceA-kinOrb-2008-01-06.txt" />
     <Text Include="..\..\Data\几何轨道\graceA-kinOrb-2008-01-07.txt" />
-    <Text Include="different.txt" />
-    <Text Include="output.txt" />
+    <Text Include="d_error.txt" />
+    <Text Include="g_error.txt" />
+    <Text Include="processed.txt" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\Data\动力学轨道\GRACE-2008-01-01-02.DAT" />

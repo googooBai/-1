@@ -18,7 +18,8 @@ namespace ClassInter {
 		const vector<Point>& knownp,
 		const vector<Point>& ob,
 		ostream& os,
-		ostream& os2);
+		ostream& os2, 
+		ostream& os3);
 	Time Normalization(vector<Point>& data,
 		int index, 
 		int staff, 

@@ -9,7 +9,8 @@ namespace ClassInter {
 		const vector<Point>& knownp,
 		const vector<Point>& ob,
 		ostream& os,
-		ostream& os2)
+		ostream& os2,
+		ostream& os3)
 	{
 		double error_x = 0.0, error_y = 0.0, error_z = 0.0;
 		double RMSE_X = 0.0, RMSE_Y = 0.0, RMSE_Z = 0.0;
@@ -21,6 +22,13 @@ namespace ClassInter {
 			<< setw(15) << "error z"
 			<< endl;
 		os2
+			<< setw(22) << "Time"
+			<< setw(15) << "error x"
+			<< setw(15) << "error y"
+			<< setw(15) << "error z"
+			<< endl;
+
+		os3
 			<< setw(22) << "Time"
 			<< setw(15) << "error x"
 			<< setw(15) << "error y"
@@ -39,9 +47,31 @@ namespace ClassInter {
 				data[i].is_d = false;
 				data[i].is_g = false;
 
-				data[i].de_x = ob[2 * i].x - data[i].ix;
-				data[i].de_y = ob[2 * i].y - data[i].iy;
-				data[i].de_z = ob[2 * i].z - data[i].iz;
+				int ob_index;
+				{
+					double t = data[i].time_d;
+					int fp = 0, ep = ob.size()-1;
+					ob_index = (fp + ep) >> 1;
+					while (fp < ep)
+					{
+						if (abs(t - ob[ob_index].time) <= 1e-6)
+							break;
+						else if (t - ob[ob_index].time > 1e-6)
+						{
+							fp = ob_index;
+							ob_index = (fp + ep) >> 1;
+						}
+						else if (t - ob[ob_index].time < -1e-6)
+						{
+							ep = ob_index;
+							ob_index = (fp + ep) >> 1;
+						}
+					}
+				}
+
+				data[i].de_x = ob[ob_index].x - data[i].ix;
+				data[i].de_y = ob[ob_index].y - data[i].iy;
+				data[i].de_z = ob[ob_index].z - data[i].iz;
 				//D_X += data[i].de_x*data[i].de_x;
 				//D_Y += data[i].de_y*data[i].de_y;
 				//D_Z += data[i].de_z*data[i].de_z;
@@ -69,6 +99,15 @@ namespace ClassInter {
 					<< setw(15) << error_z
 					<< endl;
 
+				os2.setf(ios_base::fixed);
+				os2.precision(15);
+				os2 << setw(22) << data[i].time_d;
+				os2.precision(3);
+				os2
+					<< setw(15) << data[i].de_x
+					<< setw(15) << data[i].de_y
+					<< setw(15) << data[i].de_z
+					<< endl;
 			}
 		}
 
@@ -93,9 +132,9 @@ namespace ClassInter {
 			else
 				data[i].is_g = false;
 
-			if (abs(data[i].de_x) > 2*0.03 ||
-				abs(data[i].de_y) > 2*0.03 ||
-				abs(data[i].de_z) > 2*0.03)
+			if (abs(data[i].de_x) > 0.06 ||
+				abs(data[i].de_y) > 0.06 ||
+				abs(data[i].de_z) > 0.06)
 			{
 				data[i].is_d = true;
 				total++;
@@ -110,11 +149,11 @@ namespace ClassInter {
 			
 			if (!data[i].is_g)
 			{
-				os2.setf(ios_base::fixed);
-				os2.precision(15);
-				os2 << setw(22) << data[i].time_d;
-				os2.precision(3);
-				os2
+				os3.setf(ios_base::fixed);
+				os3.precision(15);
+				os3 << setw(22) << data[i].time_d;
+				os3.precision(3);
+				os3
 					<< setw(15) << data[i].error_x
 					<< setw(15) << data[i].error_y
 					<< setw(15) << data[i].error_z
