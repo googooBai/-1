@@ -113,11 +113,16 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="ChebyshevInterpolate.cpp" />
     <ClCompile Include="ClassInterpolate.cpp" />
     <ClCompile Include="CmpError.cpp" />
     <ClCompile Include="FindIndex.cpp" />
     <ClCompile Include="GetData.cpp" />
     <ClCompile Include="GetKnownPoint.cpp" />
+    <ClCompile Include="GetOrbitPosition.cpp" />
+    <ClCompile Include="LarrangeInterpolate.cpp" />
+    <ClCompile Include="Normalization.cpp" />
+    <ClCompile Include="Polynomial.cpp" />
     <ClCompile Include="Test.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -138,6 +143,8 @@
     <Text Include="output.txt" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="..\..\Data\动力学轨道\GRACE-2008-01-01-02.DAT" />
+    <None Include="..\..\Data\动力学轨道\GRACE-2008-01-02-02.DAT" />
     <None Include="ClassDiagram.cd" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

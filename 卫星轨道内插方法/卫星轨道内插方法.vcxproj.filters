@@ -33,6 +33,21 @@
     <ClCompile Include="Test.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="Normalization.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="GetOrbitPosition.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="LarrangeInterpolate.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="ChebyshevInterpolate.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Polynomial.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="DataStructure.h">
@@ -79,5 +94,11 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="ClassDiagram.cd" />
+    <None Include="..\..\Data\动力学轨道\GRACE-2008-01-01-02.DAT">
+      <Filter>资源文件</Filter>
+    </None>
+    <None Include="..\..\Data\动力学轨道\GRACE-2008-01-02-02.DAT">
+      <Filter>资源文件</Filter>
+    </None>
   </ItemGroup>
 </Project>

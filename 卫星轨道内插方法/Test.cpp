@@ -7,85 +7,53 @@ int main()
 {
 	string filename{ "D:\\练习\\毕业设计\\Data\\几何轨道\\graceA-kinOrb-2008-01-01.txt" };
 	vector<SourceData> data = GetData(filename);
-	vector<Point> knownp = GetKnownPoint(data);
-	double start, end;
-	start = knownp.front().time;
-	end = knownp.back().time;
-	LarrangeInterpolate L;
-	ChebyshevInterpolate C;
-	Spline3v2 S;
-	/*vector<Point> x(101); 
-	vector<SourceData> u(100001);
-	for (int i = 0; i <= 5; i++)
-	{
-		x[i].time =-5+i;
-		x[i].x = 1.0/(x[i].time*x[i].time+1);
-	}
-	for (int i = 0; i <=25; i++)
-	{
-		u[i].time = -5+0.2*i;
-		u[i].x= 1.0 / (u[i].time*u[i].time + 1);
-		Point nn =S.interpolate(x, u[i].time, 5);
-		cout << nn.time << " " << nn.x << endl;
-	}*/
-
-	//while (start <= end)
-	//{
-	//	//interpolating2.push_back(C.interpolate(knownp, start,9));
-	//	interpolating1.push_back(Spline(knownp, start,11));
-	//	start += minute; //10s
-	//}
-
-	
-	ofstream fout;
-	
-	fout.open("different.txt");
-	if (!fout.is_open())
-		exit(EXIT_FAILURE);
-
-
-	CmpError(S, 11, data, knownp, fout);
-	
-	fout.close();
-	/*fout.setf(ios::fixed);
-	for (auto i = interpolating2.begin(); i != interpolating2.end(); i++)
-	{
-		fout.precision(15);
-		fout << i->time;
-		fout.precision(4);
-		fout<< " " << i->x << " " << i->y << " " << i->z << endl;
-	}
-	for (auto i = 0; i < interpolating1.size(); i++)
-	{
-		fout.precision(15);
-		fout << interpolating1[i].time;
-		fout.precision(4);
-		fout << " " << interpolating1[i].x-interpolating2[i].x << " "
-			<< interpolating1[i].y - interpolating2[i].y << " "
-			<< interpolating1[i].z - interpolating2[i].z
-			<< endl;
-	}*/
+	vector<Point> oa; vector<Point> ob;
+	filename = "D:\\练习\\毕业设计\\Data\\动力学轨道\\GRACE-2008-01-01-02.DAT";
+	GetOrbitPosition(oa, ob, filename);
 	
 	
+	int type,slope,interval;
+	while (1)
+	{	
+		cout << "0. Lar || 1. Che ||2. Poly \n";
+		cin >> type;
+		cin >> slope;
+		cin >> interval;
+		vector<Point> knownp = GetKnownPoint(data,interval);	
+		ofstream fout,fout2;
+	
+		fout.open("output.txt");
+		if (!fout.is_open())
+			exit(EXIT_FAILURE);
+		
+		fout2.open("different.txt");
+		if (!fout2.is_open())
+			exit(EXIT_FAILURE);
 
-	/*Point temp;
-	fout.open("output.txt");
-	if (!fout.is_open())
-		exit(EXIT_FAILURE);
-	fout.setf(ios::fixed);
-	for (auto i = data.begin(); i !=data.end(); i++)
-	{
-		temp=Spline(knownp, i->time,11);
-		fout.precision(15);
-		fout << temp.time;
+		if (type == 0)
+		{
+			LarrangeInterpolate L(knownp, slope);
+			CmpError(L, slope, data, knownp, oa, fout, fout2);
+		}
+		else if (type == 1)
+		{
+			ChebyshevInterpolate C(knownp, slope);
+			CmpError(C, slope, data, knownp, oa, fout, fout2);
 
-		fout.precision(6);
-		fout << "	 " << temp.x-i->x  << "	 "
-			<< temp.y -i->y << "	 "
-			<< temp.z -i->z
-			<< endl;
-	}
-	fout.close();*/
+		}
+		else if (type == 2)
+		{
+			Polynomial P(knownp, slope);
+			CmpError(P, slope, data, knownp, oa, fout, fout2);
+		}
+		else
+			cout << "Wrong Input!\n";
+			
+		fout.close();
+		fout2.close();
+		cout << "complete\n";
+	}	
+
 	system("pause");
 	return 0;
 }

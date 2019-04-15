@@ -18,7 +18,7 @@ namespace ClassInter {
 		while (!fid.eof())
 		{
 			SourceData temp;
-			fid >> temp.time;
+			fid >> temp.time_g;
 			fid >> temp.x;
 			fid >> temp.y;
 			fid >> temp.z;
@@ -28,7 +28,10 @@ namespace ClassInter {
 			fid >> temp.xy;
 			fid >> temp.xz;
 			fid >> temp.yz;
-			data.push_back(temp);		
+			temp.time_d = temp.time_g*86400.0-4453444800.0;
+			temp.is_d = false;
+			temp.is_g = false;
+			data.push_back(temp);
 		}
 		data.pop_back();
 		fid.close();
