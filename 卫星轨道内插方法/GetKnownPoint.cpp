@@ -18,14 +18,7 @@ namespace ClassInter {
 			knownp.push_back(temp);
 			index += interval;
 		}
-		if (data.size() != 1&&index!=data.size()-1)
-		{
-			temp.time = data[data.size() - 1].time_d;
-			temp.x = data[data.size() - 1].x;
-			temp.y = data[data.size() - 1].y;
-			temp.z = data[data.size() - 1].z;
-			knownp.push_back(temp);
-		}
+
 		return knownp;
 	}
 }

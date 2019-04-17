@@ -31,6 +31,7 @@ namespace ClassInter {
 			temp.time_d = temp.time_g*86400.0-4453444800.0;
 			temp.is_d = false;
 			temp.is_g = false;
+			temp.is_knownp = false;
 			data.push_back(temp);
 		}
 		data.pop_back();

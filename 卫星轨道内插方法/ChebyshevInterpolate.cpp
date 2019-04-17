@@ -4,14 +4,14 @@
 namespace ClassInter {
 	ChebyshevInterpolate::ChebyshevInterpolate(const vector<Point>& data, int slope):Slope(slope),knownp(data)
 	{
-		T = new MatrixXd*[data.size() - Slope - 1];
-		L = new MatrixXd*[data.size() - Slope - 1];
-		A = new MatrixXd*[data.size() - Slope - 1];
-		V = new MatrixXd*[data.size() - Slope - 1];
-		error[0] = new double[data.size() - Slope - 1];
-		error[1] = new double[data.size() - Slope - 1];
-		error[2] = new double[data.size() - Slope - 1];
-		for (int i = 0; i <= knownp.size() - Slope - 1; i++)
+		T = new MatrixXd*[data.size() - Slope];
+		L = new MatrixXd*[data.size() - Slope];
+		A = new MatrixXd*[data.size() - Slope];
+		V = new MatrixXd*[data.size() - Slope];
+		error[0] = new double[data.size() - Slope];
+		error[1] = new double[data.size() - Slope];
+		error[2] = new double[data.size() - Slope ];
+		for (int i = 0; i <= knownp.size() - Slope-1; i++)
 		{
 			T[i] = new MatrixXd(Slope + 1, Slope + 1);
 			A[i] = new MatrixXd(Slope + 1, 3);

@@ -15,7 +15,7 @@ int main()
 	int type,slope,interval;
 	while (1)
 	{	
-		cout << "0. Lar || 1. Che ||2. Poly \n";
+		cout << "0. Lar || 1. Che ||2. Poly ||3. Spline \n";
 		cin >> type;
 		cin >> slope;
 		cin >> interval;
@@ -49,6 +49,11 @@ int main()
 		{
 			Polynomial P(knownp, slope);
 			CmpError(P, slope, data, knownp, oa, fout, fout2, fout3);
+		}
+		else if (type == 3)
+		{
+			Spline3v2 S(knownp, slope);
+			CmpError(S, slope, data, knownp, oa, fout, fout2, fout3);
 		}
 		else
 			cout << "Wrong Input!\n";

@@ -69,9 +69,9 @@ namespace ClassInter {
 					}
 				}
 
-				data[i].de_x = ob[ob_index].x - data[i].ix;
-				data[i].de_y = ob[ob_index].y - data[i].iy;
-				data[i].de_z = ob[ob_index].z - data[i].iz;
+				data[i].de_x = ob[ob_index].x - data[i].x;
+				data[i].de_y = ob[ob_index].y - data[i].y;
+				data[i].de_z = ob[ob_index].z - data[i].z;
 				//D_X += data[i].de_x*data[i].de_x;
 				//D_Y += data[i].de_y*data[i].de_y;
 				//D_Z += data[i].de_z*data[i].de_z;
@@ -125,9 +125,9 @@ namespace ClassInter {
 		int hit{ 0 };
 		for (int i = 0; i < data.size(); i++)
 		{
-			if (abs(data[i].error_x) > 2 * RMSE_X ||
-				abs(data[i].error_y) > 2 * RMSE_Y ||
-				abs(data[i].error_z) > 2 * RMSE_Z)
+			if (abs(data[i].error_x) >  RMSE_X ||
+				abs(data[i].error_y) >  RMSE_Y ||
+				abs(data[i].error_z) >  RMSE_Z)
 				data[i].is_g = true;
 			else
 				data[i].is_g = false;

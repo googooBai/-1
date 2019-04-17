@@ -123,6 +123,7 @@
     <ClCompile Include="LarrangeInterpolate.cpp" />
     <ClCompile Include="Normalization.cpp" />
     <ClCompile Include="Polynomial.cpp" />
+    <ClCompile Include="Spline3.cpp" />
     <ClCompile Include="Test.cpp" />
   </ItemGroup>
   <ItemGroup>

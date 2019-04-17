@@ -46,6 +46,7 @@ namespace ClassInter {
 		//Flag
 		bool is_g;	//几何学轨道是否超限
 		bool is_d;	//动力学轨道是否超限
+		bool is_knownp;	//是否设为已知点
 	};
 }
 #endif // !DATASTUCTURE_H

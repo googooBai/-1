@@ -36,7 +36,7 @@ namespace ClassInter {
 		double *error[3];
 	public:
 		explicit ChebyshevInterpolate(const vector<Point>& data, int slope);
-		virtual ~ChebyshevInterpolate(){}
+		virtual ~ChebyshevInterpolate() {}
 		virtual Point interpolate(Time t);
 	};
 
@@ -48,13 +48,21 @@ namespace ClassInter {
 	//	virtual Point interpolate(vector<Point> data, Time t, int staff);
 	//};
 
-	//class Spline3v2 :public Interpolate
-	//{
-	//public:
-	//	Spline3v2() {}
-	//	virtual ~Spline3v2() {}
-	//	virtual Point interpolate(vector<Point> data, Time t, int staff);
-	//};
+	class Spline3v2 :public Interpolate
+	{
+	private:
+		int Slope;
+		vector<Point> knownp;
+		MatrixXd **B;
+		MatrixXd **M;
+		MatrixXd **d;
+		vector<double> **h;
+	public:
+		explicit Spline3v2(const vector<Point>& data,int slope);
+		virtual ~Spline3v2() {}
+		virtual Point interpolate(Time t);
+		//virtual Point interpolate(vector<Point> data, Time t, int staff);
+	};
 
 	//class BSpline
 	//{
@@ -85,7 +93,7 @@ namespace ClassInter {
 	private:
 	public:
 		explicit Polynomial(const vector<Point>& data, int slope);
-		virtual ~Polynomial(){}
+		virtual ~Polynomial() {}
 		virtual Point interpolate(Time t);
 	};		
 }

@@ -5,20 +5,21 @@ namespace ClassInter {
 
 	Polynomial::Polynomial(const vector<Point>& data, int slope) :knownp(data),Slope(slope)
 	{
+		const int MoreOb = 4;
 		//Caculate V=TA-L
-		T = new MatrixXd*[data.size() - Slope - 1];
-		A = new MatrixXd*[data.size() - Slope - 1];
-		L = new MatrixXd*[data.size() - Slope - 1];
-		V = new MatrixXd*[data.size() - Slope - 1];
-		error[0] = new double[data.size() - Slope - 1];
-		error[1] = new double[data.size() - Slope - 1];
-		error[2] = new double[data.size() - Slope - 1];
-		for (int i = 0; i <= knownp.size() - Slope - 1; i++)
+		T = new MatrixXd*[data.size() - Slope- MoreOb];
+		A = new MatrixXd*[data.size() - Slope- MoreOb];
+		L = new MatrixXd*[data.size() - Slope- MoreOb];
+		V = new MatrixXd*[data.size() - Slope- MoreOb];
+		error[0] = new double[data.size() - Slope- MoreOb];
+		error[1] = new double[data.size() - Slope- MoreOb];
+		error[2] = new double[data.size() - Slope- MoreOb];
+		for (int i = 0; i <= knownp.size() - Slope-1- MoreOb; i++)
 		{
-			T[i] = new MatrixXd(Slope + 1, Slope + 1);
-			A[i] = new MatrixXd(Slope + 1, 3);
-			L[i] = new MatrixXd(Slope + 1, 3);
-			V[i] = new MatrixXd(Slope + 1, 3);
+			T[i] = new MatrixXd(Slope + 1+ MoreOb, Slope + 1);
+			A[i] = new MatrixXd(Slope + 1+ MoreOb, 3);
+			L[i] = new MatrixXd(Slope + 1+ MoreOb, 3);
+			V[i] = new MatrixXd(Slope + 1+ MoreOb, 3);
 
 			for (int j = 0; j <= Slope; j++)
 			{

@@ -48,6 +48,9 @@
     <ClCompile Include="Polynomial.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="Spline3.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="DataStructure.h">
