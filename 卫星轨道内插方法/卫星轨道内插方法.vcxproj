@@ -142,6 +142,7 @@
     <Text Include="..\..\Data\几何轨道\graceA-kinOrb-2008-01-07.txt" />
     <Text Include="d_error.txt" />
     <Text Include="g_error.txt" />
+    <Text Include="knownp.txt" />
     <Text Include="processed.txt" />
   </ItemGroup>
   <ItemGroup>

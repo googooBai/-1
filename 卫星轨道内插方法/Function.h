@@ -7,7 +7,7 @@
 namespace ClassInter {
 
 	vector<SourceData> GetData(string filename);
-	vector<Point> GetKnownPoint(vector<SourceData> data,int interval);
+	vector<Point> GetKnownPoint(vector<SourceData>& data,int interval);
 	int FindIndex(int fp,
 		int ep,
 		Time t, 

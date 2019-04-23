@@ -9,6 +9,14 @@ namespace ClassInter {
 		Interpolate(){}
 		virtual ~Interpolate(){}
 		virtual  Point interpolate(Time t) = 0;
+		virtual void CmpError(
+			vector<SourceData>& data,
+			const vector<Point>& ob,
+			ostream& os,
+			ostream& os2,
+			ostream& os3,
+			ostream& os4
+		) = 0;		
 	};
 
 
@@ -22,6 +30,14 @@ namespace ClassInter {
 			:Slope(slope),knownp(data){}
 		virtual ~LarrangeInterpolate(){}
 		virtual Point interpolate(Time t);
+		virtual void CmpError(
+			vector<SourceData>& data,
+			const vector<Point>& ob,
+			ostream& os,
+			ostream& os2,
+			ostream& os3,
+			ostream& os4
+		);
 	};
 
 	class ChebyshevInterpolate:public Interpolate
@@ -33,11 +49,23 @@ namespace ClassInter {
 		MatrixXd **L;
 		MatrixXd **A;
 		MatrixXd **V;
+		MatrixXd **P[3];
 		double *error[3];
+		int *time_knownp;
+	    int *time_knownp_error;
+		bool *is_knownp_error;
 	public:
 		explicit ChebyshevInterpolate(const vector<Point>& data, int slope);
 		virtual ~ChebyshevInterpolate() {}
 		virtual Point interpolate(Time t);
+		virtual void CmpError(
+			vector<SourceData>& data,
+			const vector<Point>& ob,
+			ostream& os,
+			ostream& os2,
+			ostream& os3,
+			ostream& os4
+		);
 	};
 
 	//class Spline3 :public Interpolate
@@ -61,6 +89,14 @@ namespace ClassInter {
 		explicit Spline3v2(const vector<Point>& data,int slope);
 		virtual ~Spline3v2() {}
 		virtual Point interpolate(Time t);
+		virtual void CmpError(
+			vector<SourceData>& data,
+			const vector<Point>& ob,
+			ostream& os,
+			ostream& os2,
+			ostream& os3,
+			ostream& os4
+		){}
 		//virtual Point interpolate(vector<Point> data, Time t, int staff);
 	};
 
@@ -89,11 +125,23 @@ namespace ClassInter {
 		MatrixXd** A;
 		MatrixXd** L;
 		MatrixXd** V;
+		MatrixXd **P[3];
 		double *error[3];
+		int *time_knownp;
+		int *time_knownp_error;
+		bool *is_knownp_error;
 	private:
 	public:
 		explicit Polynomial(const vector<Point>& data, int slope);
 		virtual ~Polynomial() {}
 		virtual Point interpolate(Time t);
+		virtual void CmpError(
+			vector<SourceData>& data,
+			const vector<Point>& ob,
+			ostream& os,
+			ostream& os2,
+			ostream& os3,
+			ostream& os4
+		);
 	};		
 }

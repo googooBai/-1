@@ -5,7 +5,10 @@ namespace ClassInter {
 
 	using Time = double;
 	const Time minute = 1.0 / (24 * 60);
-
+	const int MoreOb_P = 10;
+	const int MoreOb_C = 10;
+	const int m_C = 15;
+	const int m_P = 15;
 	struct Point {
 		//Coordinate
 		double x;
@@ -13,6 +16,10 @@ namespace ClassInter {
 		double z;
 		//Time
 		Time time;
+		//
+		double xx;
+		double yy;
+		double zz;
 	};
 
 	struct SourceData
