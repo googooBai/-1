@@ -115,7 +115,6 @@
   <ItemGroup>
     <ClCompile Include="ChebyshevInterpolate.cpp" />
     <ClCompile Include="ClassInterpolate.cpp" />
-    <ClCompile Include="CmpError.cpp" />
     <ClCompile Include="FindIndex.cpp" />
     <ClCompile Include="GetData.cpp" />
     <ClCompile Include="GetKnownPoint.cpp" />

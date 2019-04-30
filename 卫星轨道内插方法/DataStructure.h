@@ -1,22 +1,19 @@
 #ifndef DATASTUCTURE_H
 #define DATASTUCTURE_H
-
 namespace ClassInter {
 
 	using Time = double;
-	const Time minute = 1.0 / (24 * 60);
-	const int MoreOb_P = 10;
-	const int MoreOb_C = 10;
-	const int m_C = 15;
-	const int m_P = 15;
-	struct Point {
-		//Coordinate
+	const Time minute = 1.0 / (24 * 60);	//分钟转换成天数
+	const int m_C = 30;	//切比雪夫采样点数
+	const int m_P = 30;	//N阶多项式采样点数
+	struct Point {	//节点数据类型
+		//历元
+		Time time;
+		//坐标
 		double x;
 		double y;
 		double z;
-		//Time
-		Time time;
-		//
+		//协方差
 		double xx;
 		double yy;
 		double zz;
@@ -24,29 +21,29 @@ namespace ClassInter {
 
 	struct SourceData
 	{
-		//Coordinate
+		//坐标
 		double x;
 		double y;
 		double z;
-		//Insert Corrdinate
+		//内插值
 		double ix;
 		double iy;
 		double iz;
-		//mm
+		//协方差
 		double xx;
 		double yy;
 		double zz;
 		double xy;
 		double xz;
 		double yz;
-		//TIME
-		Time time_g;
-		Time time_d;
-		//Error
-		double error_x;
-		double error_y;
+		//历元
+		Time time_g;	//几何学轨道历元（单位：天）
+		Time time_d;	//动力学轨道历元（单位：秒）
+		//内插值与几何学轨道较差
+		double error_x;	
+		double error_y;	
 		double error_z;
-		//d_Error
+		//几何学轨道与动力学轨道较差
 		double de_x;
 		double de_y;
 		double de_z;

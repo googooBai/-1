@@ -45,19 +45,14 @@ namespace ClassInter {
 	private:
 		int Slope;
 		vector<Point> knownp;
-		MatrixXd **T;
-		MatrixXd **L;
 		MatrixXd **A;
-		MatrixXd **V;
-		MatrixXd **P[3];
 		double *error[3];
-		int *time_knownp;
-	    int *time_knownp_error;
 		bool *is_knownp_error;
 	public:
 		explicit ChebyshevInterpolate(const vector<Point>& data, int slope);
 		virtual ~ChebyshevInterpolate() {}
 		virtual Point interpolate(Time t);
+		Point interpolate(Time t, ostream& os);
 		virtual void CmpError(
 			vector<SourceData>& data,
 			const vector<Point>& ob,
@@ -89,6 +84,7 @@ namespace ClassInter {
 		explicit Spline3v2(const vector<Point>& data,int slope);
 		virtual ~Spline3v2() {}
 		virtual Point interpolate(Time t);
+		Point interpolate(Time t, ostream& os);
 		virtual void CmpError(
 			vector<SourceData>& data,
 			const vector<Point>& ob,
@@ -96,10 +92,35 @@ namespace ClassInter {
 			ostream& os2,
 			ostream& os3,
 			ostream& os4
-		){}
+		);
 		//virtual Point interpolate(vector<Point> data, Time t, int staff);
 	};
 
+
+	class Polynomial :public Interpolate
+	{
+	private:
+		int Slope;
+		vector<Point> knownp;
+		MatrixXd** A;
+		double *error[3];
+		bool *is_knownp_error;
+	private:
+	public:
+		explicit Polynomial(const vector<Point>& data, int slope);
+		virtual ~Polynomial() {}
+		virtual Point interpolate(Time t);
+		Point interpolate(Time t, ostream& os);
+		virtual void CmpError(
+			vector<SourceData>& data,
+			const vector<Point>& ob,
+			ostream& os,
+			ostream& os2,
+			ostream& os3,
+			ostream& os4
+		);
+	};		
+}
 	//class BSpline
 	//{
 	//private:
@@ -115,33 +136,3 @@ namespace ClassInter {
 	//	virtual ~BSpline() {}
 	//	virtual Point interpolate(Time t);
 	//};
-
-	class Polynomial :public Interpolate
-	{
-	private:
-		int Slope;
-		vector<Point> knownp;
-		MatrixXd** T;
-		MatrixXd** A;
-		MatrixXd** L;
-		MatrixXd** V;
-		MatrixXd **P[3];
-		double *error[3];
-		int *time_knownp;
-		int *time_knownp_error;
-		bool *is_knownp_error;
-	private:
-	public:
-		explicit Polynomial(const vector<Point>& data, int slope);
-		virtual ~Polynomial() {}
-		virtual Point interpolate(Time t);
-		virtual void CmpError(
-			vector<SourceData>& data,
-			const vector<Point>& ob,
-			ostream& os,
-			ostream& os2,
-			ostream& os3,
-			ostream& os4
-		);
-	};		
-}

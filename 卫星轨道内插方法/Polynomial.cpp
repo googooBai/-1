@@ -3,133 +3,152 @@
 
 namespace ClassInter {
 
+	//
+
 	Polynomial::Polynomial(const vector<Point>& data, int slope) :knownp(data), Slope(slope)
 	{
 		//Caculate V=TA-L
-		T = new MatrixXd*[data.size() - m_P + 1];
-		L = new MatrixXd*[data.size() - m_P + 1];
-		A = new MatrixXd*[data.size() - m_P + 1];
-		V = new MatrixXd*[data.size() - m_P + 1];
-		P[0] = new MatrixXd*[data.size() - m_P + 1];
-		P[1] = new MatrixXd*[data.size() - m_P + 1];
-		P[2] = new MatrixXd*[data.size() - m_P + 1];
-		error[0] = new double[data.size() - m_P + 1];
-		error[1] = new double[data.size() - m_P + 1];
-		error[2] = new double[data.size() - m_P + 1];
+		A = new MatrixXd*[knownp.size() - m_P + 1];
+		error[0] = new double[knownp.size() - m_P + 1];
+		error[1] = new double[knownp.size() - m_P + 1];
+		error[2] = new double[knownp.size() - m_P + 1];
 		is_knownp_error = new bool[knownp.size()]{ false };
-		time_knownp = new int[knownp.size()]{ 0 };
-		time_knownp_error = new int[knownp.size()]{ 0 };
 		for (int i = 0; i <= knownp.size() - m_P; i++)
 		{
-			T[i] = new MatrixXd(m_P, Slope + 1);
 			A[i] = new MatrixXd(Slope + 1, 3);
-			L[i] = new MatrixXd(m_P, 3);
-			V[i] = new MatrixXd(m_P, 3);
+			MatrixXd newT(m_P, Slope+1);
+			MatrixXd newPx = MatrixXd::Zero(m_P, m_P);
+			MatrixXd newPy = MatrixXd::Zero(m_P, m_P);
+			MatrixXd newPz = MatrixXd::Zero(m_P, m_P);
+			MatrixXd newQx = MatrixXd::Zero(m_P, m_P);
+			MatrixXd newQy = MatrixXd::Zero(m_P, m_P);
+			MatrixXd newQz = MatrixXd::Zero(m_P, m_P);
+			MatrixXd newL(m_P, 3);
+			MatrixXd V;
 
-			MatrixXd Pinv[3];
-			for (int j = 0; j < 3; j++)
-			{
-				(*P[j]) = new MatrixXd(m_P, m_P);
-				*(*P[j]) = MatrixXd::Zero(m_P, m_P);
-				Pinv[j] = MatrixXd::Zero(m_P, m_P);
-			}
+			vector<int> knownp_index(m_P);
+			for (int j = 0; j < m_P; j++)
+				knownp_index[j] = i + j;
 
 			for (int j = 0; j < m_P; j++)
 			{
-				(*T[i])(j, 0) = 1;
+				//Set T
+				newT(j, 0) = 1;
 				for (int k = 1; k <= Slope; k++)
-					(*T[i])(j, k) = (*T[i])(j, k - 1) *
+					newT(j, k) = newT(j, k - 1) *
 					(2 * (knownp[i + j].time - knownp[i].time) / (knownp[i + m_P - 1].time - knownp[i].time) - 1);
-				(*L[i])(j, 0) = this->knownp[i + j].x;
-				(*L[i])(j, 1) = this->knownp[i + j].y;
-				(*L[i])(j, 2) = this->knownp[i + j].z;
-
+				//Set L
+				newL(j, 0) = this->knownp[i + j].x;
+				newL(j, 1) = this->knownp[i + j].y;
+				newL(j, 2) = this->knownp[i + j].z;
 				//Set P
-				(*(*P[0]))(j, j) = 1 / knownp[i + j].xx;
-				(*(*P[1]))(j, j) = 1 / knownp[i + j].yy;
-				(*(*P[2]))(j, j) = 1 / knownp[i + j].zz;
-				//Set P.inverse()
-				Pinv[0](j, j) = knownp[i + j].xx;
-				Pinv[1](j, j) = knownp[i + j].yy;
-				Pinv[2](j, j) = knownp[i + j].zz;
+				newPx(j, j) = knownp[i + j].xx;
+				newPy(j, j) = knownp[i + j].yy;
+				newPz(j, j) = knownp[i + j].zz;
+				//Set Q
+				newQx(j, j) = 1 / knownp[i + j].xx;
+				newQy(j, j) = 1 / knownp[i + j].yy;
+				newQz(j, j) = 1 / knownp[i + j].zz;
 			}
 
+			//Test
+			/*(*A[i]).col(0) = (newT.transpose()*newPx*newT).inverse()*newT.transpose()*newPx*newL.col(0);
+			(*A[i]).col(1) = (newT.transpose()*newPy*newT).inverse()*newT.transpose()*newPy*newL.col(1);
+			(*A[i]).col(2) = (newT.transpose()*newPz*newT).inverse()*newT.transpose()*newPz*newL.col(2);*/
 
-			(*A[i]).col(0) = ((*T[i]).transpose()*(*(*P[0]))*(*T[i])).inverse()*(*T[i]).transpose()*(*(*P[0]))*(*L[i]).col(0);
-			(*A[i]).col(1) = ((*T[i]).transpose()*(*(*P[1]))*(*T[i])).inverse()*(*T[i]).transpose()*(*(*P[1]))*(*L[i]).col(1);
-			(*A[i]).col(2) = ((*T[i]).transpose()*(*(*P[2]))*(*T[i])).inverse()*(*T[i]).transpose()*(*(*P[2]))*(*L[i]).col(2);
-			(*V[i]) = (*T[i])*(*A[i]) - (*L[i]);
-
-			for (int j = 0; j < 3; j++)
+			bool check;	//¥÷≤ÓÃΩ≤‚
+			do
 			{
-				MatrixXd e = ((*V[i]).col(j)).transpose()*(*(*P[j]))*(*V[i]).col(j);
-				error[j][i] = sqrt(e(0, 0) / (m_P - Slope - 1));
-			}
-
-			MatrixXd Qv[3];
-			for (int j = 0; j < 3; j++)
-			{
-				Qv[j] =
-					Pinv[j] -
-					(*T[i])*((*T[i]).transpose()*(*(*P[j]))*(*T[i])).inverse()*(*T[i]).transpose();
-			}
-
-			int not_error = 0;
-			for (int j = 0; j < m_P; j++)
-			{
-				time_knownp[i + j]++;
-				if (abs((*V[i])(j, 0) / error[0][i] / sqrt(Qv[0](j, j))) > 3 ||
-					abs((*V[i])(j, 1) / error[1][i] / sqrt(Qv[1](j, j))) > 3 ||
-					abs((*V[i])(j, 2) / error[2][i] / sqrt(Qv[2](j, j))) > 3)
-					time_knownp_error[i + j]++;
-				else
-					not_error++;
-			}
-			if (not_error < Slope + 1)
-				continue;
-			MatrixXd newT(not_error, Slope + 1);
-			MatrixXd newP[3];
-			MatrixXd newPinv[3];
-			MatrixXd newL(not_error, 3);
-			MatrixXd newV(not_error, 3);
-			for (int j = 0; j < 3; j++)
-			{
-				newP[j] = MatrixXd::Zero(not_error, not_error);
-				newPinv[j] = MatrixXd::Zero(not_error, not_error);
-			}
-			int newTptr = 0;
-			for (int j = 0; j < m_P; j++)
-			{
-				if (!(abs((*V[i])(j, 0) / error[0][i] / sqrt(Qv[0](j, j))) > 3 ||
-					abs((*V[i])(j, 1) / error[1][i] / sqrt(Qv[1](j, j))) > 3 ||
-					abs((*V[i])(j, 2) / error[2][i] / sqrt(Qv[2](j, j))) > 3))
+				check = false;
+				MatrixXd T(newT), L(newL),
+					Px(newPx), Py(newPy), Pz(newPz),
+					Qx(newQx), Qy(newQy), Qz(newQz);
+				
+				(*A[i]).col(0) = (T.transpose()*Px*T).inverse()*T.transpose()*Px*L.col(0);
+				(*A[i]).col(1) = (T.transpose()*Py*T).inverse()*T.transpose()*Py*L.col(1);
+				(*A[i]).col(2) = (T.transpose()*Pz*T).inverse()*T.transpose()*Pz*L.col(2);
+				V = T*(*A[i]) - L;
+				//Caculate Mean Error
+				MatrixXd e;
+				e = (V.col(0)).transpose()*Px*V.col(0);
+				error[0][i] = sqrt(e(0, 0) / (T.rows() - Slope - 1));
+				e = (V.col(1)).transpose()*Py*V.col(1);
+				error[1][i] = sqrt(e(0, 0) / (T.rows() - Slope - 1));
+				e = (V.col(2)).transpose()*Pz*V.col(2);
+				error[2][i] = sqrt(e(0, 0) / (T.rows() - Slope - 1));
+				//Caculate Qvv
+				MatrixXd Qvv_x, Qvv_y, Qvv_z;
+				Qvv_x = Qx - T*(T.transpose()*Px*T).inverse()*T.transpose();
+				Qvv_y = Qy - T*(T.transpose()*Py*T).inverse()*T.transpose();
+				Qvv_z = Qz - T*(T.transpose()*Pz*T).inverse()*T.transpose();
+				//Check Error
+				int index_of_error = -1;
+				double max_error=0;
+				double ex, ey, ez;
+				for (int j = 0; j < T.rows(); j++)
 				{
-					newT.row(newTptr) = (*T[i]).row(j);
-
-					newP[0](newTptr, newTptr) = (*(*P[0]))(j, j);
-					newP[1](newTptr, newTptr) = (*(*P[1]))(j, j);
-					newP[2](newTptr, newTptr) = (*(*P[2]))(j, j);
-
-					newPinv[0](newTptr, newTptr) = Pinv[0](j, j);
-					newPinv[1](newTptr, newTptr) = Pinv[1](j, j);
-					newPinv[2](newTptr, newTptr) = Pinv[2](j, j);
-
-					newL(newTptr, 0) = (*L[i])(j, 0);
-					newL(newTptr, 1) = (*L[i])(j, 1);
-					newL(newTptr, 2) = (*L[i])(j, 2);
-
-					newTptr++;
+					ex = abs(V(j, 0) / error[0][i] / sqrt(Qvv_x(j, j)));
+					ey = abs(V(j, 1) / error[1][i] / sqrt(Qvv_y(j, j)));
+					ez = abs(V(j, 2) / error[2][i] / sqrt(Qvv_z(j, j)));
+					if (ex > 3 || ey > 3 || ez > 3)					{
+						/*if (ex > max_error)
+						{
+							max_error = ex;
+							index_of_error = j;
+						}
+						if (ey > max_error)
+						{
+							max_error = ey;
+							index_of_error = j;
+						}
+						if (ez > max_error)
+						{
+							max_error = ez;
+							index_of_error = j;
+						}*/
+						if (ex*ex + ey*ey + ez*ez > max_error)
+						{
+							max_error = ex*ex + ey*ey + ez*ez;
+							index_of_error = j;
+						}
+						check = true;
+					}
 				}
-			}
-			(*A[i]).col(0) = (newT.transpose()*newP[0] * newT).inverse()*newT.transpose()*newP[0] * newL.col(0);
-			(*A[i]).col(1) = (newT.transpose()*newP[1] * newT).inverse()*newT.transpose()*newP[1] * newL.col(1);
-			(*A[i]).col(2) = (newT.transpose()*newP[2] * newT).inverse()*newT.transpose()*newP[2] * newL.col(2);
+				if (check)
+				{
+					is_knownp_error[knownp_index[index_of_error]] = true;
+					for (int j = index_of_error; j != knownp_index.size() - 1; j++)
+					{
+						knownp_index[j] = knownp_index[j + 1];
+					}
+					knownp_index.pop_back();
+					newT = MatrixXd(T.rows() - 1, Slope + 1);
+					newL = MatrixXd(T.rows() - 1, 3);
+					newPx = MatrixXd(T.rows() - 1, T.rows()-1);
+					newPy = MatrixXd(T.rows() - 1, T.rows()-1);
+					newPz = MatrixXd(T.rows() - 1, T.rows()-1);
+					newQx = MatrixXd(T.rows() - 1, T.rows() - 1);
+					newQy = MatrixXd(T.rows() - 1, T.rows() - 1);
+					newQz = MatrixXd(T.rows() - 1, T.rows() - 1);
+					for (int j = 0; j != index_of_error; j++)
+					{
+						newT.row(j) = T.row(j);
+						newL.row(j) = L.row(j);
+						newPx(j, j) = Px(j, j);
+						newPy(j, j) = Py(j, j);
+						newPz(j, j) = Pz(j, j);
+					}
+					for (int j = index_of_error + 1; j < T.rows(); j++)
+					{
+						newT.row(j - 1) = T.row(j);
+						newL.row(j - 1) = L.row(j);
+						newPx(j - 1, j - 1) = Px(j - 1, j - 1);
+						newPy(j - 1, j - 1) = Py(j - 1, j - 1);
+						newPz(j - 1, j - 1) = Pz(j - 1, j - 1);
+					}
+				}
+			} while (check);
 		}
-		for (int i = 0; i < knownp.size(); i++)
-			if ((double)time_knownp_error[i] / time_knownp[i] > 0.2)
-				is_knownp_error[i] = true;
-			else
-				is_knownp_error[i] = false;
 	}
 
 	Point Polynomial::interpolate(Time t)
@@ -143,19 +162,91 @@ namespace ClassInter {
 			index = this->knownp.size() - m_P;
 		else
 			index = index - m_P / 2;
-		Point result{ 0.0,0.0,0.0,0.0 };
-		result.time = t;
+		Point res{ 0.0,0.0,0.0,0.0 };
+		res.time = t;
 		t = 2 * (t - knownp[index].time) / (knownp[index + m_P-1].time - knownp[index].time) - 1;
 		for (int i = Slope; i >= 0; i--)
 		{
-			result.x *= t;
-			result.x += (*A[index])(i, 0);
-			result.y *= t;
-			result.y += (*A[index])(i, 1);
-			result.z *= t;
-			result.z += (*A[index])(i, 2);
+			res.x *= t;
+			res.x += (*A[index])(i, 0);
+			res.y *= t;
+			res.y += (*A[index])(i, 1);
+			res.z *= t;
+			res.z += (*A[index])(i, 2);
 		}
-		return result;
+		return res;
+	}
+
+	Point Polynomial::interpolate(Time t,ostream& os)
+	{
+		int posfirst = 0, posend = knownp.size() - 1;
+		int index = FindIndex(posfirst, posend, t, knownp);
+		//¥¶¿Ì±ﬂΩÁ
+		if (index < m_P / 2)
+			index = 0;
+		else if (index >this->knownp.size() - 1 - (m_P - m_P / 2 - 1))
+			index = this->knownp.size() - m_P;
+		else
+			index = index - m_P / 2;
+		Point res{ 0.0,0.0,0.0,0.0 };
+		res.time = t;
+		t = 2 * (t - knownp[index].time) / (knownp[index + m_P - 1].time - knownp[index].time) - 1;
+		for (int i = Slope; i >= 0; i--)
+		{
+			res.x *= t;
+			res.x += (*A[index])(i, 0);
+			res.y *= t;
+			res.y += (*A[index])(i, 1);
+			res.z *= t;
+			res.z += (*A[index])(i, 2);
+		}
+		//test
+		os << "inter point: " << endl;
+		os
+			<< setw(22) << "Time"
+			<< setw(15) << "x"
+			<< setw(15) << "y"
+			<< setw(15) << "z"
+			<< endl;
+		os.setf(ios_base::fixed);
+		os.precision(15);
+		os << setw(22) << res.time;
+		os.precision(3);
+		os
+			<< setw(15) << res.x
+			<< setw(15) << res.y
+			<< setw(15) << res.z
+			<< endl;
+
+		os << "known point: " << endl;
+		os
+			<< setw(22) << "Time"
+			<< setw(15) << "x"
+			<< setw(15) << "y"
+			<< setw(15) << "z"
+			<< setw(25) << "xx"
+			<< setw(25) << "yy"
+			<< setw(25) << "zz"
+			<< endl;
+		for (int j = index; j <= index + m_C; j++)
+		{
+			os.setf(ios_base::fixed);
+			os.precision(15);
+			os << setw(22) << knownp[j].time;
+			os.precision(3);
+			os
+				<< setw(15) << knownp[j].x
+				<< setw(15) << knownp[j].y
+				<< setw(15) << knownp[j].z
+				;
+			os.precision(15);
+			os
+				<< setw(25) << knownp[j].xx
+				<< setw(25) << knownp[j].yy
+				<< setw(25) << knownp[j].zz
+				<< endl;
+		}
+		return res;
 	}
 
 	void Polynomial::CmpError(
@@ -196,6 +287,31 @@ namespace ClassInter {
 
 		for (int i = 0; i<data.size(); i++)
 		{
+			int ob_index;
+			{
+				double t = data[i].time_d;
+				int fp = 0, ep = ob.size() - 1;
+				ob_index = (fp + ep) >> 1;
+				while (fp < ep)
+				{
+					if (abs(t - ob[ob_index].time) <= 1e-6)
+						break;
+					else if (t - ob[ob_index].time > 1e-6)
+					{
+						fp = ob_index;
+						ob_index = (fp + ep) >> 1;
+					}
+					else if (t - ob[ob_index].time < -1e-6)
+					{
+						ep = ob_index;
+						ob_index = (fp + ep) >> 1;
+					}
+				}
+			}
+
+			data[i].de_x = ob[ob_index].x - data[i].x;
+			data[i].de_y = ob[ob_index].y - data[i].y;
+			data[i].de_z = ob[ob_index].z - data[i].z;
 			int index = FindIndex(0, knownp.size() - 1, data[i].time_d, knownp);
 			if (index >= m_P / 2 && index <= this->knownp.size()-1 - (m_P - m_P / 2 - 1))
 			{
@@ -213,31 +329,6 @@ namespace ClassInter {
 					data[i].iz = data[i].z;
 				}
 
-				int ob_index;
-				{
-					double t = data[i].time_d;
-					int fp = 0, ep = ob.size() - 1;
-					ob_index = (fp + ep) >> 1;
-					while (fp < ep)
-					{
-						if (abs(t - ob[ob_index].time) <= 1e-6)
-							break;
-						else if (t - ob[ob_index].time > 1e-6)
-						{
-							fp = ob_index;
-							ob_index = (fp + ep) >> 1;
-						}
-						else if (t - ob[ob_index].time < -1e-6)
-						{
-							ep = ob_index;
-							ob_index = (fp + ep) >> 1;
-						}
-					}
-				}
-
-				data[i].de_x = ob[ob_index].x - data[i].x;
-				data[i].de_y = ob[ob_index].y - data[i].y;
-				data[i].de_z = ob[ob_index].z - data[i].z;
 
 				//x
 				data[i].error_x = data[i].ix-data[i].x;
@@ -290,6 +381,13 @@ namespace ClassInter {
 		int hit_big_error = 0;
 		for (int i = 0; i < data.size(); i++)
 		{
+			if (data[i].is_knownp)
+			{
+				if (this->is_knownp_error[knownp_index++])
+					data[i].is_g = true;
+				else
+					data[i].is_g = false;
+			}
 			int index = FindIndex(0, knownp.size() - 1, data[i].time_d, knownp);
 			if (index >= m_P / 2 && index <= this->knownp.size()-1 - (m_P - m_P / 2 - 1))
 			{
@@ -304,14 +402,7 @@ namespace ClassInter {
 				else
 					data[i].is_d = false;
 
-				if (data[i].is_knownp)
-				{
-					if (this->is_knownp_error[knownp_index])
-						data[i].is_g = true;
-					else
-						data[i].is_g = false;
-				}
-				else
+				if(!data[i].is_knownp)
 				{
 					if (abs(data[i].error_x) > 2 * RMSE_X ||
 						abs(data[i].error_y) > 2 * RMSE_Y ||
@@ -380,5 +471,38 @@ namespace ClassInter {
 		//	<< setw(8) << RMSE_Y
 		//	<< setw(8) << RMSE_Z
 		//	<< endl;
+		total = 0;
+		hit = 0;
+		mistake = 0;
+		for (int i = 0; i != data.size(); i++)
+		{
+			if (data[i].is_knownp)
+			{
+				os4.setf(ios_base::fixed);
+				os4.precision(15);
+				os4 << setw(22) << data[i].time_d;
+				
+				if (data[i].is_g)
+					os4 << setw(15) << 1;
+				else
+					os4 << setw(15) << 0;
+
+				if (data[i].is_d)
+				{
+					total++;
+					os4 << setw(15) << 1 << endl;
+				}
+				else
+					os4 << setw(15) << 0 << endl;
+
+				if (data[i].is_g&&data[i].is_d)
+					hit++;
+				if (data[i].is_g&&!data[i].is_d)
+					mistake++;
+			}
+		}
+		std::cout << "Amount of known point: " << total << endl;
+		std::cout << "Amount of hit known point: " << hit << endl;
+		std::cout << "Amount of mistake konwn point: " << mistake << endl;
 	}
 }

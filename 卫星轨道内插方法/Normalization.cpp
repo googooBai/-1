@@ -1,11 +1,11 @@
 #include"Function.h"
 namespace ClassInter {
-	Time Normalization(vector<Point>& data,int index,int staff, Time t)
+	Time Normalization(vector<Point>& data,int begin,int staff, Time t)
 	{
 		Time start, end;
-		start = data[index].time;
-		end = data[index+staff].time;
-		t = (t - start) / (end - start);
+		start = data[begin].time;
+		end = data[begin+staff].time;
+		t = 2*(t-start)/(end-start)-1;
 		return t;
 	}
 }

@@ -27,9 +27,6 @@
     <ClCompile Include="ClassInterpolate.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="CmpError.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
     <ClCompile Include="Test.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
@@ -102,12 +99,12 @@
     </Text>
   </ItemGroup>
   <ItemGroup>
-    <None Include="ClassDiagram.cd" />
     <None Include="..\..\Data\动力学轨道\GRACE-2008-01-01-02.DAT">
       <Filter>资源文件</Filter>
     </None>
     <None Include="..\..\Data\动力学轨道\GRACE-2008-01-02-02.DAT">
       <Filter>资源文件</Filter>
     </None>
+    <None Include="ClassDiagram.cd" />
   </ItemGroup>
 </Project>

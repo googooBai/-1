@@ -1,36 +1,37 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <ClassDiagram MajorVersion="1" MinorVersion="1">
-  <Class Name="ClassInter::Interpolate">
+  <Class Name="ClassInter::Interpolate" Collapsed="true">
     <Position X="3.75" Y="0.5" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAAAAAAAAQAAAAEAQAAAAAAAAAAAAA=</HashCode>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAQAAAAEAQAAAAAQAAAAAAA=</HashCode>
       <FileName>ClassInterpolate.h</FileName>
     </TypeIdentifier>
   </Class>
-  <Class Name="ClassInter::LarrangeInterpolate">
-    <Position X="4" Y="2.75" Width="1.5" />
-    <InheritanceLine Type="ClassInter::Interpolate" FixedToPoint="true">
-      <Path>
-        <Point X="4.5" Y="1.94" />
-        <Point X="4.5" Y="2.75" />
-      </Path>
-    </InheritanceLine>
+  <Class Name="ClassInter::LarrangeInterpolate" Collapsed="true">
+    <Position X="2.75" Y="1.75" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAAQAAAAAAAAAAAAAAAAAAAAMAAAAAAAAAAAAAAA=</HashCode>
+      <HashCode>AAAAAAQABAAAAAAAAAAAAAAAAAAMAAAAAAAQAAAAAEA=</HashCode>
       <FileName>ClassInterpolate.h</FileName>
     </TypeIdentifier>
   </Class>
-  <Class Name="ClassInter::ChebyshevInterpolate">
+  <Class Name="ClassInter::ChebyshevInterpolate" Collapsed="true">
     <Position X="7.25" Y="1.75" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAgAAAAAAIAAAAAAAAAAEAAAAAAAAAAAAAAA=</HashCode>
+      <HashCode>AAAAAAAABgAAAAAAIAEAAAAAAAAEAAAAAAAQIAACAEA=</HashCode>
       <FileName>ClassInterpolate.h</FileName>
     </TypeIdentifier>
   </Class>
-  <Class Name="ClassInter::Spline3">
+  <Class Name="ClassInter::Spline3v2" Collapsed="true">
     <Position X="0.5" Y="1.75" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAACAAAAAAAAAAAAABAAAAEAAAAAAAAAAAAAAA=</HashCode>
+      <HashCode>AAAAAAAABAAAAAAAAAAAAAAAAAAEIAAEQAAQEAMAAEA=</HashCode>
+      <FileName>ClassInterpolate.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ClassInter::Polynomial" Collapsed="true">
+    <Position X="5" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAABAAAAAAAQAEAAAAAAAAEAAAAAAAQIABCAEA=</HashCode>
       <FileName>ClassInterpolate.h</FileName>
     </TypeIdentifier>
   </Class>
