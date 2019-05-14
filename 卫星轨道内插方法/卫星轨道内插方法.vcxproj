@@ -128,7 +128,6 @@
   <ItemGroup>
     <ClInclude Include="ClassInterpolate.h" />
     <ClInclude Include="DataStructure.h" />
-    <ClInclude Include="Function.h" />
     <ClInclude Include="include.h" />
   </ItemGroup>
   <ItemGroup>
@@ -142,7 +141,9 @@
     <Text Include="d_error.txt" />
     <Text Include="g_error.txt" />
     <Text Include="knownp.txt" />
+    <Text Include="log.txt" />
     <Text Include="processed.txt" />
+    <Text Include="tao.txt" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\Data\动力学轨道\GRACE-2008-01-01-02.DAT" />

@@ -32,6 +32,8 @@ namespace ClassInter {
 			temp.is_d = false;
 			temp.is_g = false;
 			temp.is_knownp = false;
+			temp.is_effect_by_knownp = false;
+			temp.is_big_error = false;
 			data.push_back(temp);
 		}
 		data.pop_back();

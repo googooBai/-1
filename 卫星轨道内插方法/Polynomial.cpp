@@ -42,112 +42,120 @@ namespace ClassInter {
 				newL(j, 1) = this->knownp[i + j].y;
 				newL(j, 2) = this->knownp[i + j].z;
 				//Set P
-				newPx(j, j) = knownp[i + j].xx;
-				newPy(j, j) = knownp[i + j].yy;
-				newPz(j, j) = knownp[i + j].zz;
+				newPx(j, j) = 0.0001 / knownp[i + j].xx;
+				newPy(j, j) = 0.0001 / knownp[i + j].yy;
+				newPz(j, j) = 0.0001 / knownp[i + j].zz;
 				//Set Q
-				newQx(j, j) = 1 / knownp[i + j].xx;
-				newQy(j, j) = 1 / knownp[i + j].yy;
-				newQz(j, j) = 1 / knownp[i + j].zz;
+				newQx(j, j) = knownp[i + j].xx;
+				newQy(j, j) = knownp[i + j].yy;
+				newQz(j, j) = knownp[i + j].zz;
 			}
 
 			//Test
-			/*(*A[i]).col(0) = (newT.transpose()*newPx*newT).inverse()*newT.transpose()*newPx*newL.col(0);
+			(*A[i]).col(0) = (newT.transpose()*newPx*newT).inverse()*newT.transpose()*newPx*newL.col(0);
 			(*A[i]).col(1) = (newT.transpose()*newPy*newT).inverse()*newT.transpose()*newPy*newL.col(1);
-			(*A[i]).col(2) = (newT.transpose()*newPz*newT).inverse()*newT.transpose()*newPz*newL.col(2);*/
+			(*A[i]).col(2) = (newT.transpose()*newPz*newT).inverse()*newT.transpose()*newPz*newL.col(2);
 
-			bool check;	//´Ö²îÌ½²â
-			do
-			{
-				check = false;
-				MatrixXd T(newT), L(newL),
-					Px(newPx), Py(newPy), Pz(newPz),
-					Qx(newQx), Qy(newQy), Qz(newQz);
-				
-				(*A[i]).col(0) = (T.transpose()*Px*T).inverse()*T.transpose()*Px*L.col(0);
-				(*A[i]).col(1) = (T.transpose()*Py*T).inverse()*T.transpose()*Py*L.col(1);
-				(*A[i]).col(2) = (T.transpose()*Pz*T).inverse()*T.transpose()*Pz*L.col(2);
-				V = T*(*A[i]) - L;
-				//Caculate Mean Error
-				MatrixXd e;
-				e = (V.col(0)).transpose()*Px*V.col(0);
-				error[0][i] = sqrt(e(0, 0) / (T.rows() - Slope - 1));
-				e = (V.col(1)).transpose()*Py*V.col(1);
-				error[1][i] = sqrt(e(0, 0) / (T.rows() - Slope - 1));
-				e = (V.col(2)).transpose()*Pz*V.col(2);
-				error[2][i] = sqrt(e(0, 0) / (T.rows() - Slope - 1));
-				//Caculate Qvv
-				MatrixXd Qvv_x, Qvv_y, Qvv_z;
-				Qvv_x = Qx - T*(T.transpose()*Px*T).inverse()*T.transpose();
-				Qvv_y = Qy - T*(T.transpose()*Py*T).inverse()*T.transpose();
-				Qvv_z = Qz - T*(T.transpose()*Pz*T).inverse()*T.transpose();
-				//Check Error
-				int index_of_error = -1;
-				double max_error=0;
-				double ex, ey, ez;
-				for (int j = 0; j < T.rows(); j++)
-				{
-					ex = abs(V(j, 0) / error[0][i] / sqrt(Qvv_x(j, j)));
-					ey = abs(V(j, 1) / error[1][i] / sqrt(Qvv_y(j, j)));
-					ez = abs(V(j, 2) / error[2][i] / sqrt(Qvv_z(j, j)));
-					if (ex > 3 || ey > 3 || ez > 3)					{
-						/*if (ex > max_error)
-						{
-							max_error = ex;
-							index_of_error = j;
-						}
-						if (ey > max_error)
-						{
-							max_error = ey;
-							index_of_error = j;
-						}
-						if (ez > max_error)
-						{
-							max_error = ez;
-							index_of_error = j;
-						}*/
-						if (ex*ex + ey*ey + ez*ez > max_error)
-						{
-							max_error = ex*ex + ey*ey + ez*ez;
-							index_of_error = j;
-						}
-						check = true;
-					}
-				}
-				if (check)
-				{
-					is_knownp_error[knownp_index[index_of_error]] = true;
-					for (int j = index_of_error; j != knownp_index.size() - 1; j++)
-					{
-						knownp_index[j] = knownp_index[j + 1];
-					}
-					knownp_index.pop_back();
-					newT = MatrixXd(T.rows() - 1, Slope + 1);
-					newL = MatrixXd(T.rows() - 1, 3);
-					newPx = MatrixXd(T.rows() - 1, T.rows()-1);
-					newPy = MatrixXd(T.rows() - 1, T.rows()-1);
-					newPz = MatrixXd(T.rows() - 1, T.rows()-1);
-					newQx = MatrixXd(T.rows() - 1, T.rows() - 1);
-					newQy = MatrixXd(T.rows() - 1, T.rows() - 1);
-					newQz = MatrixXd(T.rows() - 1, T.rows() - 1);
-					for (int j = 0; j != index_of_error; j++)
-					{
-						newT.row(j) = T.row(j);
-						newL.row(j) = L.row(j);
-						newPx(j, j) = Px(j, j);
-						newPy(j, j) = Py(j, j);
-						newPz(j, j) = Pz(j, j);
-					}
-					for (int j = index_of_error + 1; j < T.rows(); j++)
-					{
-						newT.row(j - 1) = T.row(j);
-						newL.row(j - 1) = L.row(j);
-						newPx(j - 1, j - 1) = Px(j - 1, j - 1);
-						newPy(j - 1, j - 1) = Py(j - 1, j - 1);
-						newPz(j - 1, j - 1) = Pz(j - 1, j - 1);
-					}
-				}
-			} while (check);
+			//bool check;	//´Ö²îÌ½²â
+			//do
+			//{
+			//	check = false;
+			//	MatrixXd T(newT), L(newL),
+			//		Px(newPx), Py(newPy), Pz(newPz),
+			//		Qx(newQx), Qy(newQy), Qz(newQz);
+			//	
+			//	(*A[i]).col(0) = (T.transpose()*Px*T).inverse()*T.transpose()*Px*L.col(0);
+			//	(*A[i]).col(1) = (T.transpose()*Py*T).inverse()*T.transpose()*Py*L.col(1);
+			//	(*A[i]).col(2) = (T.transpose()*Pz*T).inverse()*T.transpose()*Pz*L.col(2);
+			//	V = T*(*A[i]) - L;
+			//	//Caculate Mean Error
+			//	MatrixXd e;
+			//	e = (V.col(0)).transpose()*Px*V.col(0);
+			//	error[0][i] = sqrt(e(0, 0) / (T.rows() - Slope - 1));
+			//	e = (V.col(1)).transpose()*Py*V.col(1);
+			//	error[1][i] = sqrt(e(0, 0) / (T.rows() - Slope - 1));
+			//	e = (V.col(2)).transpose()*Pz*V.col(2);
+			//	error[2][i] = sqrt(e(0, 0) / (T.rows() - Slope - 1));
+			//	
+			//	//Caculate Qvv
+			//	MatrixXd Qvv_x, Qvv_y, Qvv_z;
+			//	Qvv_x = Qx - T*(T.transpose()*Px*T).inverse()*T.transpose();
+			//	Qvv_y = Qy - T*(T.transpose()*Py*T).inverse()*T.transpose();
+			//	Qvv_z = Qz - T*(T.transpose()*Pz*T).inverse()*T.transpose();
+			//	//Check Error
+			//	int index_of_error = -1;
+			//	double max_error=0;
+			//	double ex, ey, ez;
+			//	for (int j = 0; j < T.rows(); j++)
+			//	{
+			//		ex = abs(V(j, 0) / error[0][i] / sqrt(Qvv_x(j, j)));
+			//		ey = abs(V(j, 1) / error[1][i] / sqrt(Qvv_y(j, j)));
+			//		ez = abs(V(j, 2) / error[2][i] / sqrt(Qvv_z(j, j)));
+			//		if (ex > 3 || ey > 3 || ez > 3)
+			//		{
+			//			/*if (ex > max_error)
+			//			{
+			//				max_error = ex;
+			//				index_of_error = j;
+			//			}
+			//			if (ey > max_error)
+			//			{
+			//				max_error = ey;
+			//				index_of_error = j;
+			//			}
+			//			if (ez > max_error)
+			//			{
+			//				max_error = ez;
+			//				index_of_error = j;
+			//			}*/
+			//			if (ex*ex + ey*ey + ez*ez > max_error)
+			//			{
+			//				max_error = ex*ex + ey*ey + ez*ez;
+			//				index_of_error = j;
+			//			}
+			//			check = true;
+			//		}
+			//	}
+			//	if (check)
+			//	{
+			//		is_knownp_error[knownp_index[index_of_error]] = true;
+			//		for (int j = index_of_error; j != knownp_index.size() - 1; j++)
+			//		{
+			//			knownp_index[j] = knownp_index[j + 1];
+			//		}
+			//		knownp_index.pop_back();
+			//		newT = MatrixXd(T.rows() - 1, Slope + 1);
+			//		newL = MatrixXd(T.rows() - 1, 3);
+			//		newPx = MatrixXd::Zero(T.rows() - 1, T.rows()-1);
+			//		newPy = MatrixXd::Zero(T.rows() - 1, T.rows()-1);
+			//		newPz = MatrixXd::Zero(T.rows() - 1, T.rows()-1);
+			//		newQx = MatrixXd::Zero(T.rows() - 1, T.rows() - 1);
+			//		newQy = MatrixXd::Zero(T.rows() - 1, T.rows() - 1);
+			//		newQz = MatrixXd::Zero(T.rows() - 1, T.rows() - 1);
+			//		for (int j = 0; j != index_of_error; j++)
+			//		{
+			//			newT.row(j) = T.row(j);
+			//			newL.row(j) = L.row(j);
+			//			newPx(j, j) = Px(j, j);
+			//			newPy(j, j) = Py(j, j);
+			//			newPz(j, j) = Pz(j, j);
+			//			newQx(j, j) = Qx(j, j);
+			//			newQy(j, j) = Qy(j, j);
+			//			newQz(j, j) = Qz(j, j);
+			//		}
+			//		for (int j = index_of_error + 1; j < T.rows(); j++)
+			//		{
+			//			newT.row(j - 1) = T.row(j);
+			//			newL.row(j - 1) = L.row(j);
+			//			newPx(j - 1, j - 1) = Px(j, j);
+			//			newPy(j - 1, j - 1) = Py(j, j);
+			//			newPz(j - 1, j - 1) = Pz(j, j);
+			//			newQx(j - 1, j - 1) = Qx(j, j);
+			//			newQy(j - 1, j - 1) = Qy(j, j);
+			//			newQz(j - 1, j - 1) = Qz(j, j);
+			//		}
+			//	}
+			//} while (check);
 		}
 	}
 
@@ -287,6 +295,10 @@ namespace ClassInter {
 
 		for (int i = 0; i<data.size(); i++)
 		{
+			data[i].is_effect_by_knownp = false;
+			data[i].is_g = false;
+			data[i].is_d = false;
+			data[i].is_big_error = false;
 			int ob_index;
 			{
 				double t = data[i].time_d;
@@ -379,15 +391,17 @@ namespace ClassInter {
 		int knownp_index = 0;
 		int big_error = 0;
 		int hit_big_error = 0;
+		int cx = 0, cy = 0, cz = 0;
+
 		for (int i = 0; i < data.size(); i++)
 		{
-			if (data[i].is_knownp)
+			/*if (data[i].is_knownp)
 			{
 				if (this->is_knownp_error[knownp_index++])
 					data[i].is_g = true;
 				else
 					data[i].is_g = false;
-			}
+			}*/
 			int index = FindIndex(0, knownp.size() - 1, data[i].time_d, knownp);
 			if (index >= m_P / 2 && index <= this->knownp.size()-1 - (m_P - m_P / 2 - 1))
 			{
@@ -401,6 +415,32 @@ namespace ClassInter {
 				}
 				else
 					data[i].is_d = false;
+
+				if (data[i].is_knownp)
+				{
+					data[i].is_g = false;
+					os4.setf(ios_base::fixed);
+					os4.precision(15);
+					os4 << setw(22) << data[i].time_d;
+					os4.precision(3);
+					os4 << setw(15) << data[i].de_x
+						<< setw(15) << data[i].de_y
+						<< setw(15) << data[i].de_z
+						<< setw(15) << data[i].is_d
+						<< endl;
+					if (data[i].is_d)
+					{
+						abs(data[i].de_x)>0.06 ? cx++ : cx;
+						abs(data[i].de_y)>0.06 ? cy++ : cy;
+						abs(data[i].de_z)>0.06 ? cz++ : cz;
+
+						for (int j = 1; j <= 5; j++)
+						{
+							data[i - j].is_effect_by_knownp = data[i - j].is_knownp ? false : true;
+							data[i + j].is_effect_by_knownp = data[i + j].is_knownp ? false : true;
+						}
+					}
+				}
 
 				if(!data[i].is_knownp)
 				{
@@ -426,6 +466,7 @@ namespace ClassInter {
 					abs(data[i].de_z) > 0.1)
 				{
 					big_error++;
+					data[i].is_big_error = true;
 					if (data[i].is_g)
 						hit_big_error++;
 				}
@@ -447,6 +488,40 @@ namespace ClassInter {
 				}
 			}
 		}
+
+		int n_effectbyknownp = 0;
+		double ef_RMSE_X = 0.0, ef_RMSE_Y = 0.0, ef_RMSE_Z = 0.0;
+		int ef_error = 0, ef_hit = 0, ef_mistake = 0;
+		int ef_big = 0, ef_hit_big = 0;
+		for (int i = 0; i < data.size(); i++)
+		{
+			int index = FindIndex(0, knownp.size() - 1, data[i].time_d, knownp);
+			if (index >= this->Slope / 2 && index <= (knownp.size() - (this->Slope - this->Slope / 2) - 1))
+			{
+				if (data[i].is_effect_by_knownp)
+				{
+					n_effectbyknownp++;
+					ef_RMSE_X += data[i].error_x*data[i].error_x;
+					ef_RMSE_Y += data[i].error_y*data[i].error_y;
+					ef_RMSE_Z += data[i].error_z*data[i].error_z;
+					if (data[i].is_d)
+					{
+						ef_error++;
+					}
+					data[i].is_g&&data[i].is_d ? ef_hit++ : ef_hit;
+					data[i].is_g && !data[i].is_d ? ef_mistake : ef_mistake;
+					if (data[i].is_big_error)
+					{
+						ef_big++;
+						data[i].is_g ? ef_hit_big++ : ef_hit_big;
+					}
+				}
+			}
+		}
+		ef_RMSE_X = sqrt(ef_RMSE_X / n_effectbyknownp);
+		ef_RMSE_Y = sqrt(ef_RMSE_Y / n_effectbyknownp);
+		ef_RMSE_Z = sqrt(ef_RMSE_Z / n_effectbyknownp);
+
 		std::cout << "Amount of error: " << total << endl;
 		std::cout << "Amount of big error(more than 1cm): " << big_error << "	  eliminate: " << hit_big_error << endl;
 		std::cout.setf(ios_base::fixed);
@@ -458,6 +533,19 @@ namespace ClassInter {
 			<< setw(8) << RMSE_X
 			<< setw(8) << RMSE_Y
 			<< setw(8) << RMSE_Z
+			<< endl;
+		std::cout << "Amount of effected by known point which have gross: " << n_effectbyknownp << endl;
+		std::cout << "Amount of effected by konwn is error: " << ef_error << endl;
+		std::cout << "Amount of effected by konwon is big error£º " << ef_big << "    eliminate: " << ef_hit_big << endl;
+		std::cout << "cx: " << cx << "	cy: " << cy << "    cz: " << cz << endl;
+		std::cout.precision(1);
+		std::cout << "Rate of sucessful: %" << (double)ef_hit / ef_error * 100 << endl;
+		std::cout << "Rate of mistake: %" << (double)ef_mistake / n_effectbyknownp * 100 << endl;
+		std::cout.precision(3);
+		std::cout
+			<< setw(8) << ef_RMSE_X
+			<< setw(8) << ef_RMSE_Y
+			<< setw(8) << ef_RMSE_Z
 			<< endl;
 		//os4 << "Amount of error: " << total << endl;
 		//os4 << "Amount of big error(more than 1cm): " << big_error << "	  eliminate: " << hit_big_error << endl;
@@ -471,7 +559,7 @@ namespace ClassInter {
 		//	<< setw(8) << RMSE_Y
 		//	<< setw(8) << RMSE_Z
 		//	<< endl;
-		total = 0;
+		/*total = 0;
 		hit = 0;
 		mistake = 0;
 		for (int i = 0; i != data.size(); i++)
@@ -503,6 +591,6 @@ namespace ClassInter {
 		}
 		std::cout << "Amount of known point: " << total << endl;
 		std::cout << "Amount of hit known point: " << hit << endl;
-		std::cout << "Amount of mistake konwn point: " << mistake << endl;
+		std::cout << "Amount of mistake konwn point: " << mistake << endl;*/
 	}
 }

@@ -46,6 +46,8 @@ namespace ClassInter {
 		int Slope;
 		vector<Point> knownp;
 		MatrixXd **A;
+		Time* start;
+		Time* end;
 		double *error[3];
 		bool *is_knownp_error;
 	public:
@@ -62,14 +64,6 @@ namespace ClassInter {
 			ostream& os4
 		);
 	};
-
-	//class Spline3 :public Interpolate
-	//{
-	//public:
-	//	Spline3() {}
-	//	virtual ~Spline3() {}
-	//	virtual Point interpolate(vector<Point> data, Time t, int staff);
-	//};
 
 	class Spline3v2 :public Interpolate
 	{
@@ -119,7 +113,7 @@ namespace ClassInter {
 			ostream& os3,
 			ostream& os4
 		);
-	};		
+	};	
 }
 	//class BSpline
 	//{

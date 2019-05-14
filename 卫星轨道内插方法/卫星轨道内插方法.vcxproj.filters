@@ -53,13 +53,13 @@
     <ClInclude Include="DataStructure.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="Function.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
     <ClInclude Include="ClassInterpolate.h">
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="include.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Function.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>
@@ -95,6 +95,12 @@
       <Filter>资源文件</Filter>
     </Text>
     <Text Include="knownp.txt">
+      <Filter>资源文件</Filter>
+    </Text>
+    <Text Include="log.txt">
+      <Filter>资源文件</Filter>
+    </Text>
+    <Text Include="tao.txt">
       <Filter>资源文件</Filter>
     </Text>
   </ItemGroup>

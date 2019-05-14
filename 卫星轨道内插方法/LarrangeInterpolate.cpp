@@ -74,6 +74,10 @@ namespace ClassInter {
 
 		for (int i = 0; i < data.size(); i++)
 		{
+			data[i].is_effect_by_knownp = false;
+			data[i].is_g = false;
+			data[i].is_d = false;
+			data[i].is_big_error = false;
 			int index = FindIndex(0, knownp.size() - 1, data[i].time_d, knownp);
 			if (index >= this->Slope / 2 && index <= (knownp.size() - (this->Slope - this->Slope / 2) - 1))
 			{
@@ -165,6 +169,8 @@ namespace ClassInter {
 		int knownp_index = 0;
 		int big_error = 0;
 		int hit_big_error = 0;
+		int cx = 0, cy = 0, cz = 0;
+
 
 		for (int i = 0; i < data.size(); i++)
 		{
@@ -193,6 +199,18 @@ namespace ClassInter {
 						<< setw(15) << data[i].de_z
 						<< setw(15) << data[i].is_d
 						<< endl;
+					if (data[i].is_d)
+					{
+						abs(data[i].de_x)>0.06 ? cx++ : cx;
+						abs(data[i].de_y)>0.06? cy++ : cy;
+						abs(data[i].de_z)>0.06? cz++ : cz;
+
+						for (int j = 1; j <= 5; j++)
+						{
+							data[i - j].is_effect_by_knownp = data[i - j].is_knownp ? false : true;
+							data[i + j].is_effect_by_knownp = data[i + j].is_knownp ? false : true;
+						}
+					}
 				}
 				else
 				{
@@ -215,6 +233,7 @@ namespace ClassInter {
 					abs(data[i].de_z) > 0.1)
 				{
 					big_error++;
+					data[i].is_big_error = true;
 					if (data[i].is_g)
 						hit_big_error++;
 				}
@@ -236,6 +255,39 @@ namespace ClassInter {
 				}
 			}
 		}
+		int n_effectbyknownp = 0;
+		double ef_RMSE_X = 0.0, ef_RMSE_Y = 0.0, ef_RMSE_Z = 0.0;
+		int ef_error=0,ef_hit = 0, ef_mistake = 0;
+		int ef_big = 0, ef_hit_big = 0;
+		for (int i = 0; i < data.size(); i++)
+		{
+			int index = FindIndex(0, knownp.size() - 1, data[i].time_d, knownp);
+			if (index >= this->Slope / 2 && index <= (knownp.size() - (this->Slope - this->Slope / 2) - 1))
+			{
+				if (data[i].is_effect_by_knownp)
+				{
+					n_effectbyknownp++;
+					ef_RMSE_X += data[i].error_x*data[i].error_x;
+					ef_RMSE_Y += data[i].error_y*data[i].error_y;
+					ef_RMSE_Z += data[i].error_z*data[i].error_z;
+					if (data[i].is_d)
+					{
+						ef_error++;
+					}
+					data[i].is_g&&data[i].is_d ? ef_hit++ : ef_hit;
+					data[i].is_g && !data[i].is_d ? ef_mistake : ef_mistake;
+					if (data[i].is_big_error)
+					{
+						ef_big++;
+						data[i].is_g ? ef_hit_big++ : ef_hit_big;
+					}					
+				}
+			}
+		}
+		ef_RMSE_X = sqrt(ef_RMSE_X / n_effectbyknownp);
+		ef_RMSE_Y = sqrt(ef_RMSE_Y / n_effectbyknownp);
+		ef_RMSE_Z = sqrt(ef_RMSE_Z / n_effectbyknownp);
+
 		std::cout << "Amount of error: " << total << endl;
 		std::cout << "Amount of big error(more than 1cm): " << big_error << "	  eliminate: " << hit_big_error << endl;
 		std::cout.setf(ios_base::fixed);
@@ -247,6 +299,19 @@ namespace ClassInter {
 			<< setw(8) << RMSE_X
 			<< setw(8) << RMSE_Y
 			<< setw(8) << RMSE_Z
+			<< endl;
+		std::cout << "Amount of effected by known point which have gross: " << n_effectbyknownp << endl;
+		std::cout << "Amount of effected by konwn is error: " << ef_error << endl;
+		std::cout << "Amount of effected by konwon is big error£º " << ef_big << "    eliminate: " << ef_hit_big << endl;
+		std::cout << "cx: " << cx << "	cy: " << cy << "    cz: " << cz << endl;
+		std::cout.precision(1);
+		std::cout << "Rate of sucessful: %" << (double)ef_hit / ef_error*100 << endl;
+		std::cout << "Rate of mistake: %" << (double)ef_mistake / n_effectbyknownp * 100 << endl;
+		std::cout.precision(3);
+		std::cout
+			<< setw(8) <<ef_RMSE_X
+			<< setw(8) <<ef_RMSE_Y
+			<< setw(8) <<ef_RMSE_Z
 			<< endl;
 	}
 }
